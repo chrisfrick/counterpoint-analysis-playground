@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import abcjs from 'abcjs'
+import { AbcNotation, Interval } from 'tonal'
 
 import Vex from 'vexflow';
 
@@ -142,16 +144,74 @@ const EasyScore: React.FC = () => {
   );
 };
 
-
-
 const App = () => {
+  const [upperVoice, setUpperVoice] = useState('cde')
+  const [lowerVoice, setLowerVoice] = useState('CDE')
 
+  const abcSplit = (abcNotation: string) => abcNotation.split(/(?=[A-Za-z])/)
+  const abcInterval = (lowerVoice: string, upperVoice: string) =>
+    Interval.simplify(AbcNotation.distance(lowerVoice, upperVoice))
+
+  const counterpointObject = {
+    lowerVoice: abcSplit(lowerVoice),
+    upperVoice: abcSplit(upperVoice),
+    intervals() {
+      let intervals = []
+      for (let i = 0; i < this.lowerVoice.length; i++) {
+        intervals.push(abcInterval(this.lowerVoice[i], this.upperVoice[i]))
+      }
+      return intervals
+    },
+  }
+
+  const intervals = () => {
+    let ints = []
+    for (let i = 0; i < lowerVoice.length; i++) {
+      ints.push(abcInterval(lowerVoice[i], upperVoice[i]))
+    }
+    return ints
+  }
+
+  const abcString = `
+M: 4/4
+L: 1
+%%staves [V1 V2]
+V: V1 clef=treble
+V: V2 clef=bass
+[V: V1] ${upperVoice}]
+w: ${counterpointObject.intervals().join(' ')}
+[V: V2] ${lowerVoice}]
+
+`
+
+  useEffect(() => {
+    abcjs.renderAbc('paper', abcString)
+  }, [abcString])
 
   return (
     <div>
-      <EasyScore />
+      <div>
+        upper voice
+        <input
+          value={upperVoice}
+          onChange={event => setUpperVoice(event.target.value)}
+        />
+      </div>
+      <div>
+        lower voice
+        <input
+          value={lowerVoice}
+          onChange={event => setLowerVoice(event.target.value)}
+        />
+      </div>
+      <div id="paper"></div>
+      <div>{Interval.simplify(AbcNotation.distance('E', 'g'))}</div>
+      <div>upper voice: {counterpointObject.upperVoice.join(' // ')}</div>
+      <div>lower voice: {counterpointObject.lowerVoice.join(' // ')}</div>
+      <div>intervals: {counterpointObject.intervals().join('  //  ')}</div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+
