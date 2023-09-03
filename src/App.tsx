@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs from 'abcjs'
-import { AbcNotation, Interval } from 'tonal'
+import { AbcNotation, Direction, Interval, Note } from 'tonal'
 
 import Vex from 'vexflow';
 
@@ -145,12 +145,42 @@ const EasyScore: React.FC = () => {
 };
 
 const App = () => {
-  const [upperVoice, setUpperVoice] = useState('cde')
-  const [lowerVoice, setLowerVoice] = useState('CDE')
+  const [upperVoice, setUpperVoice] = useState('cdef')
+  const [lowerVoice, setLowerVoice] = useState('C,B,,A,,A,,')
 
   const abcSplit = (abcNotation: string) => abcNotation.split(/(?=[A-Za-z])/)
   const abcInterval = (lowerVoice: string, upperVoice: string) =>
     Interval.simplify(AbcNotation.distance(lowerVoice, upperVoice))
+
+  const calculateSingleVoiceMotion = (notes: string[]) => {
+    let voiceMotion: number[] = []
+    notes.forEach((note, index, array) => {
+      // skip first note
+      if (index === 0) return;
+
+      // check for same note
+      if (array[index - 1] === note) {
+        voiceMotion = [...voiceMotion, 0]
+        console.log(voiceMotion)
+        return
+      }
+      // console.log(Note.midi(AbcNotation.abcToScientificNotation(array[index - 1])))
+      let direction = (Interval.get(
+        Interval.distance(
+          AbcNotation.abcToScientificNotation(array[index - 1]),
+          AbcNotation.abcToScientificNotation(note)
+        ))
+        .dir
+      )
+
+      if (direction) {
+        voiceMotion = [...voiceMotion, direction]
+      }
+
+      console.log(voiceMotion)
+    })
+    return voiceMotion;
+  }
 
   const counterpointObject = {
     lowerVoice: abcSplit(lowerVoice),
@@ -162,15 +192,31 @@ const App = () => {
       }
       return intervals
     },
+    motion() {
+      let motion: string[] = []
+      let voice1 = this.upperVoice;
+      let voice2 = this.lowerVoice;
+      let voice2Motion = calculateSingleVoiceMotion(voice2)
+      let voice1Motion = calculateSingleVoiceMotion(voice1)
+      console.log(voice2Motion, voice1Motion)
+      voice2Motion.forEach((entry, index) => {
+        if (entry === 0 || voice1Motion[index] === 0) {
+          motion = [...motion, "Oblique"]
+          return
+        }
+        if (entry === voice1Motion[index]) {
+          motion = [...motion, 'Similar']
+          return
+        }
+        if (entry !== voice1Motion[index]) {
+          motion = [...motion, 'Contrary']
+          return
+        }
+      })
+      return motion
+    },
   }
-
-  const intervals = () => {
-    let ints = []
-    for (let i = 0; i < lowerVoice.length; i++) {
-      ints.push(abcInterval(lowerVoice[i], upperVoice[i]))
-    }
-    return ints
-  }
+  console.log(counterpointObject.motion());
 
   const abcString = `
 M: 4/4
@@ -181,11 +227,11 @@ V: V2 clef=bass
 [V: V1] ${upperVoice}]
 w: ${counterpointObject.intervals().join(' ')}
 [V: V2] ${lowerVoice}]
-
 `
 
   useEffect(() => {
     abcjs.renderAbc('paper', abcString)
+    // console.log(counterpointObject)
   }, [abcString])
 
   return (
@@ -205,10 +251,10 @@ w: ${counterpointObject.intervals().join(' ')}
         />
       </div>
       <div id="paper"></div>
-      <div>{Interval.simplify(AbcNotation.distance('E', 'g'))}</div>
       <div>upper voice: {counterpointObject.upperVoice.join(' // ')}</div>
       <div>lower voice: {counterpointObject.lowerVoice.join(' // ')}</div>
       <div>intervals: {counterpointObject.intervals().join('  //  ')}</div>
+      <div>motion: {counterpointObject.motion().join('  //  ')}</div>
     </div>
   )
 }
