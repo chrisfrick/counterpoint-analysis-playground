@@ -1,30 +1,57 @@
 import { Interval, AbcNotation } from 'tonal';
 
-export const calculateSingleVoiceMotion = (notes: string[]) => {
-  let voiceMotion: number[] = [];
-  notes.forEach((note, index, array) => {
-    // skip first note
+export const calculateMelodicIntervals = (notes: string[]) => {
+  const melodicIntervals: string[] = [];
+  notes.forEach((currentNote, index, array) => {
+    // Skip first note
     if (index === 0) return;
 
-    // check for same note
-    if (array[index - 1] === note) {
-      voiceMotion = [...voiceMotion, 0];
-      console.log(voiceMotion);
-      return;
-    }
-    // console.log(Note.midi(AbcNotation.abcToScientificNotation(array[index - 1])))
-    let direction = Interval.get(
-      Interval.distance(
-        AbcNotation.abcToScientificNotation(array[index - 1]),
-        AbcNotation.abcToScientificNotation(note)
-      )
-    ).dir;
+    const prevNote = array[index - 1];
+    const interval = Interval.distance(prevNote, currentNote);
 
-    if (direction) {
-      voiceMotion = [...voiceMotion, direction];
-    }
-
-    console.log(voiceMotion);
+    console.log(interval);
+    melodicIntervals.push(interval);
   });
-  return voiceMotion;
+  return melodicIntervals;
+};
+
+export const calculateMotion = (voice1: string[], voice2: string[]) => {
+  const voice1Motion = calculateMelodicIntervals(voice1);
+  const voice2Motion = calculateMelodicIntervals(voice2);
+
+  const motion: string[] = [];
+
+  voice2Motion.forEach((interval, index) => {
+    // Check for oblique motion
+    const interval1 = Interval.get(voice1Motion[index]);
+    const interval2 = Interval.get(interval);
+    console.log(interval);
+    console.log(Interval.get(interval));
+    if (
+      Interval.get(interval).num === 1 ||
+      Interval.get(voice1Motion[index]).num === 1
+    ) {
+      motion.push('Oblique');
+    } else if (interval1.dir !== interval2.dir) {
+      motion.push('Contrary');
+    } else if (
+      interval1.dir === interval2.dir &&
+      interval1.num === interval2.num
+    ) {
+      motion.push('Parallel');
+    } else {
+      motion.push('Similar');
+    }
+  });
+
+  return motion;
+};
+
+// Example of what the counterpointObject needs to look like
+
+const counterpointObject = {
+  voice1: [],
+  voice2: [],
+  intervals: [],
+  motion: [], // Motion from beat to beat
 };

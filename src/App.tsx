@@ -1,49 +1,37 @@
 import { useEffect, useState } from 'react';
 import abcjs from 'abcjs';
-import { AbcNotation, Interval, Note } from 'tonal';
+import { AbcNotation, Interval } from 'tonal';
 
-import { calculateSingleVoiceMotion } from './utils';
+import { calculateMelodicIntervals, calculateMotion } from './utils';
 
 const App = () => {
-  const [upperVoice, setUpperVoice] = useState('cdef');
-  const [lowerVoice, setLowerVoice] = useState('C,B,,A,,A,,');
+  const [upperVoice, setUpperVoice] = useState('cdefdFG');
+  const [lowerVoice, setLowerVoice] = useState('C,B,,A,,A,,B,,D,G,');
 
   const abcSplit = (abcNotation: string) => abcNotation.split(/(?=[A-Za-z])/);
-  const abcInterval = (lowerVoice: string, upperVoice: string) =>
-    Interval.simplify(AbcNotation.distance(lowerVoice, upperVoice));
 
   const counterpointObject = {
-    lowerVoice: abcSplit(lowerVoice),
-    upperVoice: abcSplit(upperVoice),
+    lowerVoice: abcSplit(lowerVoice).map((note) =>
+      AbcNotation.abcToScientificNotation(note)
+    ),
+    upperVoice: abcSplit(upperVoice).map((note) =>
+      AbcNotation.abcToScientificNotation(note)
+    ),
     intervals() {
-      let intervals = [];
+      const intervals = [];
       for (let i = 0; i < this.lowerVoice.length; i++) {
-        intervals.push(abcInterval(this.lowerVoice[i], this.upperVoice[i]));
+        intervals.push(
+          Interval.simplify(
+            Interval.distance(this.lowerVoice[i], this.upperVoice[i])
+          )
+        );
       }
       return intervals;
     },
     motion() {
-      let motion: string[] = [];
-      let voice1 = this.upperVoice;
-      let voice2 = this.lowerVoice;
-      let voice2Motion = calculateSingleVoiceMotion(voice2);
-      let voice1Motion = calculateSingleVoiceMotion(voice1);
-      console.log(voice2Motion, voice1Motion);
-      voice2Motion.forEach((entry, index) => {
-        if (entry === 0 || voice1Motion[index] === 0) {
-          motion = [...motion, 'Oblique'];
-          return;
-        }
-        if (entry === voice1Motion[index]) {
-          motion = [...motion, 'Similar'];
-          return;
-        }
-        if (entry !== voice1Motion[index]) {
-          motion = [...motion, 'Contrary'];
-          return;
-        }
-      });
-      return motion;
+      const voice1 = this.upperVoice;
+      const voice2 = this.lowerVoice;
+      return calculateMotion(voice1, voice2);
     },
   };
   console.log(counterpointObject.motion());
