@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AbcNotation, Interval } from 'tonal';
 
-import { calculateMotion } from './utils';
+import {
+  abcSplit,
+  calculateMotion,
+  isTritone,
+  usesCadenceFormula,
+} from './utils';
 import Notation from './components/Notation';
 
 const App = () => {
-  const [upperVoice, setUpperVoice] = useState('cdefdFG');
-  const [lowerVoice, setLowerVoice] = useState('C,B,,A,,A,,B,,D,G,');
-
-  const abcSplit = (abcNotation: string) => abcNotation.split(/(?=[A-Za-z])/);
+  const [upperVoice, setUpperVoice] = useState('cBBcBBcBc');
+  const [lowerVoice, setLowerVoice] = useState('C,D,F,F,G,D,E,D,C,');
+  const [keySignature, setKeySignature] = useState('C');
+  const [errors, setErrors] = useState({});
 
   const counterpointObject = {
     lowerVoice: abcSplit(lowerVoice).map((note) =>
@@ -17,6 +22,7 @@ const App = () => {
     upperVoice: abcSplit(upperVoice).map((note) =>
       AbcNotation.abcToScientificNotation(note)
     ),
+    key: keySignature,
     intervals() {
       const intervals = [];
       for (let i = 0; i < this.lowerVoice.length; i++) {
@@ -35,13 +41,33 @@ const App = () => {
     },
   };
 
-  const upperVoiceAbc = abcSplit(upperVoice);
   const motion = counterpointObject.motion();
+
+  interface error {
+    type: string;
+    noteIndex: number;
+  }
+  // check for tritones
+  const checkForTritones = (intervals: string[]) => {
+    const tritoneErrors: error[] = [];
+    intervals.forEach((interval, index) => {
+      if (isTritone(interval)) {
+        const newError = { type: 'tritone', noteIndex: index };
+        tritoneErrors.push(newError);
+      }
+    });
+    return tritoneErrors;
+  };
+
+  const tritoneErrors = checkForTritones(counterpointObject.intervals());
+  console.log(tritoneErrors);
+
+  const upperVoiceAbc = abcSplit(upperVoice);
   const upperVoiceRenderArr: string[] = [];
   upperVoiceAbc.forEach((note, index) => {
     if (motion[index]) {
       upperVoiceRenderArr.push(note);
-      upperVoiceRenderArr.push(`"^${motion[index][0]}"y`);
+      upperVoiceRenderArr.push(`"_${motion[index][0]}"y|`);
       return;
     }
     upperVoiceRenderArr.push(note);
@@ -55,13 +81,13 @@ const App = () => {
       return;
     }
     lowerVoiceRenderArr.push(note);
-    lowerVoiceRenderArr.push('y');
+    lowerVoiceRenderArr.push('y|');
   });
-  console.log(lowerVoiceRenderArr);
 
   const abcString = `
 M: 4/4
 L: 1
+K: ${keySignature}
 %%staves [V1 V2]
 V: V1 clef=treble
 V: V2 clef=bass
@@ -84,6 +110,21 @@ w: 1 3 5 6 3 3 8
   return (
     <div>
       <div>
+        key
+        <select
+          value={keySignature}
+          onChange={(event) => setKeySignature(event.target.value)}
+        >
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+        </select>
+      </div>
+      <div>
         upper voice
         <input
           value={upperVoice}
@@ -98,10 +139,37 @@ w: 1 3 5 6 3 3 8
         />
       </div>
       <Notation abcString={abcString} />
-      <div>upper voice: {counterpointObject.upperVoice.join(' // ')}</div>
-      <div>lower voice: {counterpointObject.lowerVoice.join(' // ')}</div>
-      <div>intervals: {counterpointObject.intervals().join('  //  ')}</div>
-      <div>motion: {counterpointObject.motion().join('  //  ')}</div>
+      <div>upper voice: {counterpointObject.upperVoice.join(', ')}</div>
+      <div>
+        upper voice uses cadence formula:{' '}
+        {usesCadenceFormula(
+          counterpointObject.upperVoice,
+          keySignature
+        ).toString()}
+      </div>
+      <br></br>
+      <div>lower voice: {counterpointObject.lowerVoice.join(', ')}</div>
+      <div>
+        lower voice uses cadence formula:{' '}
+        {usesCadenceFormula(
+          counterpointObject.lowerVoice,
+          keySignature
+        ).toString()}
+      </div>
+      <br></br>
+      <div>intervals: {counterpointObject.intervals().join(', ')}</div>
+      <div>motion: {counterpointObject.motion().join(', ')}</div>
+      <br></br>
+      <div>
+        Errors
+        <ul>
+          {tritoneErrors.map((error) => (
+            <li key={error.noteIndex}>
+              measure: {error.noteIndex} type: {error.type}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

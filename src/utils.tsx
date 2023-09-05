@@ -1,4 +1,7 @@
-import { Interval, AbcNotation } from 'tonal';
+import { Interval, AbcNotation, Scale, Note } from 'tonal';
+
+export const abcSplit = (abcNotation: string) =>
+  abcNotation.split(/(?=[A-Za-z])/);
 
 export const calculateMelodicIntervals = (notes: string[]) => {
   const melodicIntervals: string[] = [];
@@ -44,11 +47,51 @@ export const calculateMotion = (voice1: string[], voice2: string[]) => {
   return motion;
 };
 
-// Example of what the counterpointObject needs to look like
+export const isTritone = (interval: string) => {
+  if (Interval.get(interval).semitones === 6) {
+    return true;
+  }
+  return false;
+};
 
-const counterpointObject = {
-  voice1: [],
-  voice2: [],
-  intervals: [],
-  motion: [], // Motion from beat to beat
+export const usesCadenceFormula = (voice: string[], key: string) => {
+  const scale = Scale.degrees(key + ' major');
+  const lastThreeNotes = voice.slice(-3);
+
+  // Check that last note is 'do'
+  if (Note.pitchClass(lastThreeNotes[2]) !== scale(1)) {
+    return false;
+  }
+
+  const scaleInCorrectOctave = Scale.degrees(lastThreeNotes[2] + ' major');
+
+  const cadenceFormulas = [
+    [3, 2, 1],
+    [-2, -1, 1],
+    [2, 2, 1],
+    [-1, -1, 1],
+    [2, -1, 1],
+    [-1, 2, 1],
+    [1, 2, 1],
+    [1, -1, 1],
+  ];
+
+  const cadenceFormulasAsNotes = cadenceFormulas.map((formula) =>
+    formula.map((degree) => {
+      return scaleInCorrectOctave(degree);
+    })
+  );
+
+  const compareArrays = (a: string[], b: string[]) =>
+    a.length === b.length && a.every((elem, index) => elem === b[index]);
+
+  if (
+    cadenceFormulasAsNotes.find((formula) =>
+      compareArrays(formula, lastThreeNotes)
+    )
+  ) {
+    return true;
+  }
+
+  return false;
 };
