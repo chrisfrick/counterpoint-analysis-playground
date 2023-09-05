@@ -9,7 +9,6 @@ export const calculateMelodicIntervals = (notes: string[]) => {
     const prevNote = array[index - 1];
     const interval = Interval.distance(prevNote, currentNote);
 
-    console.log(interval);
     melodicIntervals.push(interval);
   });
   return melodicIntervals;
@@ -25,8 +24,6 @@ export const calculateMotion = (voice1: string[], voice2: string[]) => {
     // Check for oblique motion
     const interval1 = Interval.get(voice1Motion[index]);
     const interval2 = Interval.get(interval);
-    console.log(interval);
-    console.log(Interval.get(interval));
     if (
       Interval.get(interval).num === 1 ||
       Interval.get(voice1Motion[index]).num === 1

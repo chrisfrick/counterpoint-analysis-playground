@@ -34,7 +34,30 @@ const App = () => {
       return calculateMotion(voice1, voice2);
     },
   };
-  console.log(counterpointObject.motion());
+
+  const upperVoiceAbc = abcSplit(upperVoice);
+  const motion = counterpointObject.motion();
+  const upperVoiceRenderArr: string[] = [];
+  upperVoiceAbc.forEach((note, index) => {
+    if (motion[index]) {
+      upperVoiceRenderArr.push(note);
+      upperVoiceRenderArr.push(`"^${motion[index][0]}"y`);
+      return;
+    }
+    upperVoiceRenderArr.push(note);
+  });
+
+  const lowerVoiceAbc = abcSplit(lowerVoice);
+  const lowerVoiceRenderArr: string[] = [];
+  lowerVoiceAbc.forEach((note, index) => {
+    if (index === lowerVoiceAbc.length - 1) {
+      lowerVoiceRenderArr.push(note);
+      return;
+    }
+    lowerVoiceRenderArr.push(note);
+    lowerVoiceRenderArr.push('y');
+  });
+  console.log(lowerVoiceRenderArr);
 
   const abcString = `
 M: 4/4
@@ -42,9 +65,20 @@ L: 1
 %%staves [V1 V2]
 V: V1 clef=treble
 V: V2 clef=bass
-[V: V1] ${upperVoice}|]
+[V: V1] ${upperVoiceRenderArr.join('')}|]
 w: ${counterpointObject.intervals().join(' ')}
-[V: V2] ${lowerVoice}|]
+[V: V2] ${lowerVoiceRenderArr.join('')}|]
+`;
+
+  const motionTest = `
+M: 4/4
+L: 1
+%%staves [V1 V2]
+V: V1 clef=treble
+V: V2 clef=bass
+[V: V1] cydyeyfydyFyG|]
+w: 1 3 5 6 3 3 8
+[V: V2] C,yB,,yA,,yA,,yB,,yD,yG,|]
 `;
 
   return (

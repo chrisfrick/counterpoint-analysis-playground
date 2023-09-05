@@ -8,9 +8,14 @@ interface NotationProps {
 const Notation = ({ abcString }: NotationProps) => {
   const notation = useRef(null);
 
+  const options = {
+    add_classes: true,
+    selectionColor: 'green',
+  };
+
   useEffect(() => {
     if (notation.current) {
-      abcjs.renderAbc(notation.current, abcString);
+      abcjs.renderAbc(notation.current, abcString, options);
     }
   }, [abcString]);
 
