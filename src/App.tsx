@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import abcjs from 'abcjs';
+import { useState } from 'react';
 import { AbcNotation, Interval } from 'tonal';
 
-import { calculateMelodicIntervals, calculateMotion } from './utils';
+import { calculateMotion } from './utils';
+import Notation from './components/Notation';
 
 const App = () => {
   const [upperVoice, setUpperVoice] = useState('cdefdFG');
@@ -47,11 +47,6 @@ w: ${counterpointObject.intervals().join(' ')}
 [V: V2] ${lowerVoice}|]
 `;
 
-  useEffect(() => {
-    abcjs.renderAbc('paper', abcString);
-    // console.log(counterpointObject)
-  }, [abcString]);
-
   return (
     <div>
       <div>
@@ -68,7 +63,7 @@ w: ${counterpointObject.intervals().join(' ')}
           onChange={(event) => setLowerVoice(event.target.value)}
         />
       </div>
-      <div id="paper"></div>
+      <Notation abcString={abcString} />
       <div>upper voice: {counterpointObject.upperVoice.join(' // ')}</div>
       <div>lower voice: {counterpointObject.lowerVoice.join(' // ')}</div>
       <div>intervals: {counterpointObject.intervals().join('  //  ')}</div>
