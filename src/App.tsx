@@ -60,13 +60,17 @@ const App = () => {
   };
 
   const tritoneErrors = checkForTritones(counterpointObject.intervals());
-  console.log(tritoneErrors);
 
   const upperVoiceAbc = abcSplit(upperVoice);
   const upperVoiceRenderArr: string[] = [];
   upperVoiceAbc.forEach((note, index) => {
     if (motion[index]) {
-      upperVoiceRenderArr.push(note);
+      if (tritoneErrors.find((error) => error.noteIndex === index)) {
+        upperVoiceRenderArr.push(`"^tritone!"`);
+        upperVoiceRenderArr.push(note);
+      } else {
+        upperVoiceRenderArr.push(note);
+      }
       upperVoiceRenderArr.push(`"_${motion[index][0]}"y|`);
       return;
     }
@@ -96,15 +100,19 @@ w: ${counterpointObject.intervals().join(' ')}
 [V: V2] ${lowerVoiceRenderArr.join('')}|]
 `;
 
-  const motionTest = `
+  console.log(abcString);
+
+  const testString = `
 M: 4/4
 L: 1
-%%staves [V1 V2]
+K: C
+%staves [V1 V2]
 V: V1 clef=treble
 V: V2 clef=bass
-[V: V1] cydyeyfydyFyG|]
-w: 1 3 5 6 3 3 8
-[V: V2] C,yB,,yA,,yA,,yB,,yD,yG,|]
+[V: V1] c"_C"y|B"_O"y|"^tritone!"B"_O"y|c"_C"y|B"_O"y|B"_P"y|c"_P"y|B"_C"y|c|]
+w: 1P 6M 4A 5P 3M 6M 6m 6M 1P
+[V: V2] C,y|D,y|F,y|F,y|G,y|D,y|E,y|D,y|C,|]
+
 `;
 
   return (
@@ -170,6 +178,7 @@ w: 1 3 5 6 3 3 8
           ))}
         </ul>
       </div>
+      <Notation abcString={testString} />
     </div>
   );
 };
