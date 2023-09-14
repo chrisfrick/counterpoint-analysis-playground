@@ -2,58 +2,6 @@ import { Scale, Note, Range, Interval } from 'tonal';
 
 /* Input melody */
 
-const melody = {
-  key: 'C',
-  timeSignature: '4/4',
-  clef: 'treble',
-  measures: [
-    {
-      notes: [
-        {
-          pitch: 'C4',
-          duration: 'h',
-        },
-        {
-          pitch: 'D4',
-          duration: 'h',
-        },
-      ],
-    },
-    {
-      notes: [
-        {
-          pitch: 'E4',
-          duration: 'h',
-        },
-        {
-          pitch: 'F4',
-          duration: 'h',
-        },
-      ],
-    },
-    {
-      notes: [
-        {
-          pitch: 'E4',
-          duration: 'h',
-        },
-        {
-          pitch: 'D4',
-          duration: 'h',
-        },
-      ],
-    },
-    {
-      notes: [
-        {
-          pitch: 'C4',
-          duration: 'w',
-        },
-      ],
-    },
-  ],
-};
-
 const usesCadenceFormula = (notes, key) => {
   const scale = Scale.degrees(key + ' major');
   const lastThreeNotes = notes.slice(-3);
