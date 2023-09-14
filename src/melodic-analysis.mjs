@@ -135,12 +135,12 @@ const usesMostlyStepwiseMotion = (melody) => {
     measure.notes.forEach((note, noteIndex, noteArr) => {
       if (measureIndex === 0 && noteIndex === 0) {
         currentNote = melody.measures[0].notes[0];
-      } else {
-        prevNote = currentNote;
-        currentNote = noteArr[noteIndex];
-        let distance = Interval.distance(prevNote.pitch, currentNote.pitch);
-        melodicIntervals.push(distance);
+        return;
       }
+      prevNote = currentNote;
+      currentNote = noteArr[noteIndex];
+      let distance = Interval.distance(prevNote.pitch, currentNote.pitch);
+      melodicIntervals.push(distance);
     });
   });
 
@@ -154,11 +154,71 @@ const usesMostlyStepwiseMotion = (melody) => {
     0
   );
 
-  console.log(leapsCount / intervalCount);
+  const leapsToStepsRatio = leapsCount / intervalCount;
+  // 15% seems like a good threshold for too many leaps?
+  if (leapsToStepsRatio <= 0.15) {
+    return {
+      severity: 0,
+    };
+  } else if (leapsToStepsRatio > 0.15 && leapsToStepsRatio <= 0.35) {
+    return {
+      severity: 1,
+      type: 'use mostly stepwise motion',
+    };
+  } else {
+    return {
+      severity: 3,
+      type: 'too many leaps',
+    };
+  }
+};
+
+const leapsResolveAppropriately = (melody) => {
+  let prevNote;
+  let currentNote;
+  let prevInterval;
+  let currentInterval;
+  let errors = [];
+
+  melody.measures.forEach((measure, measureIndex, measureArr) => {
+    measure.notes.forEach((note, noteIndex, noteArr) => {
+      if (measureIndex === 0 && noteIndex === 0) {
+        currentNote = melody.measures[0].notes[0];
+        return;
+      }
+      prevNote = currentNote;
+      currentNote = noteArr[noteIndex];
+      prevInterval = currentInterval;
+      currentInterval = Interval.get(
+        Interval.distance(prevNote.pitch, currentNote.pitch)
+      ).num;
+      if (Math.abs(prevInterval) >= 4) {
+        // Check that signs are different
+        if (currentInterval * prevInterval > 0) {
+          errors.push({
+            measureIndex,
+            noteIndex,
+            severity: 3,
+            type: 'must resolve in the opposite direction by step',
+          });
+        }
+        // Check that resolution is by step
+        if (Math.abs(currentInterval) > 2) {
+          errors.push({
+            measureIndex,
+            noteIndex,
+            severity: 3,
+            type: 'no consecutive leaps',
+          });
+        }
+      }
+    });
+  });
+  return errors;
 };
 
 const errorFormat = {
-  measureNumber: 1,
+  measureIndex: 1,
   noteIndex: 1,
   severity: 3, // something like 1 low, 2 med, 3 high?
   type: 'leap should resolve by step', // consecutive leaps, range is greater than octave
@@ -177,10 +237,11 @@ const melodicAnalysis = (melody) => {
 
   console.log('cadence formula:', usesCadenceFormula(notes, 'C'));
   console.log('range is within an octave', rangeIsWithinAnOctave(notes));
-  // Check for mostly stepwise motion
-  usesMostlyStepwiseMotion(melody);
-  // Check for leaps >= 4th to reverse by step
-  // Check for consecutive leaps
+  console.log('uses mostly stepwise motion', usesMostlyStepwiseMotion(melody));
+  console.log(
+    'leaps resolve appropriately, and no consecutive leaps',
+    leapsResolveAppropriately(melody)
+  );
 
   return;
 };
