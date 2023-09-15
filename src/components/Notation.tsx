@@ -22,13 +22,10 @@ const Notation = ({ abcString }: NotationProps) => {
         selectionColor: 'red',
         responsive: 'resize',
       });
-      console.log(abcString.length);
-      console.log(abcObject[0].getElementFromChar(100));
     }
   }, [abcString]);
 
   const text = document.querySelectorAll('.abcjs-annotation');
-  console.log(text);
   return (
     <div style={{ width: 900 }}>
       <div ref={notation}></div>

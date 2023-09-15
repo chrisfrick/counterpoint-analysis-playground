@@ -1,4 +1,6 @@
-export const bassMelody = {
+import { Music, Voice } from '../types';
+
+export const bassMelody: Voice = {
   key: 'C',
   timeSignature: '4/4',
   clef: 'bass',
@@ -28,7 +30,7 @@ export const bassMelody = {
   ],
 };
 
-export const trebleMelody = {
+export const trebleMelody: Voice = {
   key: 'C',
   timeSignature: '4/4',
   clef: 'treble',
@@ -53,12 +55,14 @@ export const trebleMelody = {
       ],
     },
     {
-      notes: [{ pitch: 'C5', duration: '1/2' }],
+      notes: [{ pitch: 'C5', duration: '1' }],
     },
   ],
 };
 
-export const musicObject = {
+export const musicObject: Music = {
+  key: 'C',
+  timeSignature: '4/4',
   voice1: trebleMelody,
   voice2: bassMelody,
 };
