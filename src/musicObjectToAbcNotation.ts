@@ -1,7 +1,7 @@
 import { AbcNotation, Scale } from 'tonal';
 import { Music, Voice } from './types';
 
-const singleVoiceToAbc = (voice: Voice) => {
+export const singleVoiceToAbc = (voice: Voice) => {
   const scaleName = voice.key.includes('m')
     ? `${voice.key} minor`
     : `${voice.key} major`;

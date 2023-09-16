@@ -10,6 +10,7 @@ import {
 import Notation from './components/Notation';
 import { musicObjectToAbcNotation } from './musicObjectToAbcNotation';
 import { musicObject } from './data/melody';
+import NotationInput from './components/NotationInput';
 
 const App = () => {
   const [upperVoice, setUpperVoice] = useState('cBBcBBcBc');
@@ -121,6 +122,7 @@ w: 1P 6M 4A 5P 3M 6M 6m 6M 1P
 
   return (
     <div>
+      <NotationInput />
       <div>
         key
         <select
