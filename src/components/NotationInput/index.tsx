@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Measure, Note, Voice } from '../../types';
+import { Note, Voice } from '../../types';
 import { Stack, Typography, Button } from '@mui/material';
 
 import Notation from '../Notation';
+import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
 import {
-  musicObjectToAbcNotation,
-  singleVoiceToAbc,
-} from '../../musicObjectToAbcNotation';
-import { calculateMeasureLength } from '../../utils';
+  calculateMeasureLength,
+  extractNotesFromSingleVoice,
+} from '../../utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
 import OctaveButtons from './OctaveButtons';

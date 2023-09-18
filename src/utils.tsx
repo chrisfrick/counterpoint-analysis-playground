@@ -1,5 +1,5 @@
 import { Interval, AbcNotation, Scale, Note } from 'tonal';
-import { Measure } from './types';
+import { Measure, Voice } from './types';
 
 export const abcSplit = (abcNotation: string) =>
   abcNotation.split(/(?=[A-Za-z])/);
@@ -111,3 +111,12 @@ export const calculateMeasureLength = (measure: Measure) =>
     (measureLength, note) => noteLengthToDecimal(note.duration) + measureLength,
     0
   );
+
+export const extractNotesFromSingleVoice = (voice: Voice) => {
+  const notes = voice.measures
+    .map((measure) => {
+      return measure.notes;
+    })
+    .flat();
+  return notes;
+};
