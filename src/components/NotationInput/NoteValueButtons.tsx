@@ -9,13 +9,19 @@ import {
 
 interface Props {
   noteValue: string;
-  handleNoteLength: (
-    event: React.MouseEvent<HTMLElement>,
-    newNoteValue: string | null
-  ) => void;
+  setNoteValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const NoteValueButtons = ({ noteValue, handleNoteLength }: Props) => {
+const NoteValueButtons = ({ noteValue, setNoteValue }: Props) => {
+  const handleNoteLength = (
+    event: React.MouseEvent<HTMLElement>,
+    newNoteValue: string | null
+  ) => {
+    if (newNoteValue !== null) {
+      setNoteValue(newNoteValue);
+    }
+  };
+
   return (
     <Stack direction="row">
       <ToggleButtonGroup

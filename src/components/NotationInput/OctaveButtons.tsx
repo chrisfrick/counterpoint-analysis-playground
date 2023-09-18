@@ -2,12 +2,18 @@ import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 interface Props {
   octave: string;
-  handleOctave: (
-    event: React.MouseEvent<HTMLElement>,
-    newNoteValue: string | null
-  ) => void;
+  setOctave: React.Dispatch<React.SetStateAction<string>>;
 }
-const OctaveButtons = ({ octave, handleOctave }: Props) => {
+const OctaveButtons = ({ octave, setOctave }: Props) => {
+  const handleOctave = (
+    event: React.MouseEvent<HTMLElement>,
+    newOctave: string | null
+  ) => {
+    if (newOctave !== null) {
+      setOctave(newOctave);
+    }
+  };
+
   return (
     <Stack direction="row">
       <ToggleButtonGroup value={octave} exclusive onChange={handleOctave}>

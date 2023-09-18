@@ -2,13 +2,19 @@ import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 interface Props {
   noteLetter: string;
-  handleNoteLetter: (
-    event: React.MouseEvent<HTMLElement>,
-    newNoteLetter: string | null
-  ) => void;
+  setNoteLetter: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const NoteLetterButtons = ({ noteLetter, handleNoteLetter }: Props) => {
+const NoteLetterButtons = ({ noteLetter, setNoteLetter }: Props) => {
+  const handleNoteLetter = (
+    event: React.MouseEvent<HTMLElement>,
+    newNoteLetter: string | null
+  ) => {
+    if (newNoteLetter !== null) {
+      setNoteLetter(newNoteLetter);
+    }
+  };
+
   return (
     <Stack direction="row">
       <ToggleButtonGroup

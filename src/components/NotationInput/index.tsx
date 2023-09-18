@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Measure, Note, Voice } from '../../types';
-import {
-  Stack,
-  ToggleButtonGroup,
-  ToggleButton,
-  Typography,
-  Button,
-} from '@mui/material';
+import { Stack, Typography, Button } from '@mui/material';
 
 import Notation from '../Notation';
 import { singleVoiceToAbc } from '../../musicObjectToAbcNotation';
@@ -19,6 +13,18 @@ const NotationInput = () => {
   const [noteValue, setNoteValue] = useState('1');
   const [noteLetter, setNoteLetter] = useState('C');
   const [octave, setOctave] = useState('4');
+  const [currentVoice, setCurrentVoice] = useState('1');
+  const [voice2, setVoice2] = useState<Voice>({
+    key: 'C',
+    timeSignature: '4/4',
+    clef: 'bass',
+    cantus: false,
+    measures: [
+      {
+        notes: [],
+      },
+    ],
+  });
   const [voice1, setVoice1] = useState<Voice>({
     key: 'C',
     timeSignature: '4/4',
@@ -42,33 +48,6 @@ const NotationInput = () => {
     `;
     setAbcString(newAbcString);
   }, [voice1]);
-
-  const handleNoteLength = (
-    event: React.MouseEvent<HTMLElement>,
-    newNoteValue: string | null
-  ) => {
-    if (newNoteValue !== null) {
-      setNoteValue(newNoteValue);
-    }
-  };
-
-  const handleNoteLetter = (
-    event: React.MouseEvent<HTMLElement>,
-    newNoteLetter: string | null
-  ) => {
-    if (newNoteLetter !== null) {
-      setNoteLetter(newNoteLetter);
-    }
-  };
-
-  const handleOctave = (
-    event: React.MouseEvent<HTMLElement>,
-    newOctave: string | null
-  ) => {
-    if (newOctave !== null) {
-      setOctave(newOctave);
-    }
-  };
 
   const handleNewNote = () => {
     const pitch = noteLetter.concat(octave);
@@ -107,18 +86,16 @@ const NotationInput = () => {
   return (
     <div>
       <Typography variant="h5">Notation Input</Typography>
+
       <Stack direction="row" spacing={3}>
-        <NoteValueButtons
-          noteValue={noteValue}
-          handleNoteLength={handleNoteLength}
-        />
+        <NoteValueButtons noteValue={noteValue} setNoteValue={setNoteValue} />
 
         <NoteLetterButtons
           noteLetter={noteLetter}
-          handleNoteLetter={handleNoteLetter}
+          setNoteLetter={setNoteLetter}
         />
 
-        <OctaveButtons octave={octave} handleOctave={handleOctave} />
+        <OctaveButtons octave={octave} setOctave={setOctave} />
 
         <Button variant="outlined" onClick={handleNewNote}>
           Add Note
