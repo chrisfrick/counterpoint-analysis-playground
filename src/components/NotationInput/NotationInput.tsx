@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Note, Voice } from '../../types';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, Tooltip } from '@mui/material';
 
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
@@ -123,13 +123,17 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
 
         <OctaveButtons octave={octave} setOctave={setOctave} />
 
-        <Button variant="contained" onClick={handleNewNote}>
-          Add Note
-        </Button>
+        <Tooltip title="(enter)">
+          <Button variant="contained" onClick={handleNewNote}>
+            Add Note
+          </Button>
+        </Tooltip>
 
-        <Button variant="outlined" onClick={handleDelete}>
-          Delete
-        </Button>
+        <Tooltip title="(backspace)">
+          <Button variant="outlined" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Tooltip>
       </Stack>
 
       <Stack direction="row" alignItems="baseline">

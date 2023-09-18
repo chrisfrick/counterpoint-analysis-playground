@@ -1,4 +1,4 @@
-import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 import { Icon } from '@mdi/react';
 import {
   mdiMusicNoteEighth,
@@ -30,17 +30,27 @@ const NoteValueButtons = ({ noteValue, setNoteValue }: Props) => {
         onChange={handleNoteLength}
       >
         <ToggleButton value="1/8">
-          <Icon path={mdiMusicNoteEighth} size={1}></Icon>
+          <Tooltip title="Eighth note (4)">
+            <Icon path={mdiMusicNoteEighth} size={1}></Icon>
+          </Tooltip>
         </ToggleButton>
 
         <ToggleButton value="1/4">
-          <Icon path={mdiMusicNoteQuarter} size={1}></Icon>
+          <Tooltip title="Quarter note (5)">
+            <Icon path={mdiMusicNoteQuarter} size={1}></Icon>
+          </Tooltip>
         </ToggleButton>
+
         <ToggleButton value="1/2">
-          <Icon path={mdiMusicNoteHalf} size={1}></Icon>
+          <Tooltip title="Half note (6)">
+            <Icon path={mdiMusicNoteHalf} size={1}></Icon>
+          </Tooltip>
         </ToggleButton>
+
         <ToggleButton value="1">
-          <Icon path={mdiMusicNoteWhole} size={1}></Icon>
+          <Tooltip title="Whole note (7)">
+            <Icon path={mdiMusicNoteWhole} size={1}></Icon>
+          </Tooltip>
         </ToggleButton>
       </ToggleButtonGroup>
     </Stack>

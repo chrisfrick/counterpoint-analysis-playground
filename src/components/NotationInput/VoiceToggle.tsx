@@ -22,8 +22,8 @@ const VoiceToggle = ({ currentVoice, setCurrentVoice }: Props) => {
       exclusive
       onChange={handleVoiceToggle}
     >
-      <ToggleButton value="1">Upper Voice</ToggleButton>
-      <ToggleButton value="2">Lower Voice</ToggleButton>
+      <ToggleButton value="1">Upper Voice (u)</ToggleButton>
+      <ToggleButton value="2">Lower Voice (l)</ToggleButton>
     </ToggleButtonGroup>
   );
 };
