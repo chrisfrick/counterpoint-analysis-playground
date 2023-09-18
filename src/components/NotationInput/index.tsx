@@ -4,10 +4,11 @@ import { Stack, Typography, Button } from '@mui/material';
 
 import Notation from '../Notation';
 import { singleVoiceToAbc } from '../../musicObjectToAbcNotation';
-import { calculateMeasureLength, noteLengthToDecimal } from '../../utils';
+import { calculateMeasureLength } from '../../utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
 import OctaveButtons from './OctaveButtons';
+import VoiceToggle from './VoiceToggle';
 
 const NotationInput = () => {
   const [noteValue, setNoteValue] = useState('1');
@@ -102,7 +103,13 @@ const NotationInput = () => {
         </Button>
       </Stack>
 
-      <Notation abcString={abcString} />
+      <Stack direction="row" pt={2}>
+        <VoiceToggle
+          currentVoice={currentVoice}
+          setCurrentVoice={setCurrentVoice}
+        />
+        <Notation abcString={abcString} />
+      </Stack>
     </div>
   );
 };
