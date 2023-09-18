@@ -124,13 +124,13 @@ const usesMostlyStepwiseMotion = (melody: Voice): Error => {
   }, 0);
 
   const leapsToStepsRatio = leapsCount ? leapsCount / intervalCount : 0;
-  // 15% seems like a good threshold for too many leaps?
-  if (leapsToStepsRatio <= 0.15) {
+  // 25% seems like a good threshold for too many leaps?
+  if (leapsToStepsRatio <= 0.25) {
     return {
       type: 'StepwiseMotion',
       severity: 0,
     };
-  } else if (leapsToStepsRatio > 0.15 && leapsToStepsRatio <= 0.35) {
+  } else if (leapsToStepsRatio > 0.25 && leapsToStepsRatio <= 0.45) {
     return {
       type: 'StepwiseMotion',
       severity: 1,
