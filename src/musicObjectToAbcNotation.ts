@@ -48,7 +48,6 @@ export const musicObjectToAbcNotation = (musicObject: Music) => {
 
   const cantus = musicObject.voice2.cantus ? voice2 : voice1;
 
-  console.log(calculateIntervals(musicObject));
   const abcNotation = `
 M: ${musicObject.timeSignature}
 L: 1

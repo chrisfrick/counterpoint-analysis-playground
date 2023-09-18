@@ -13,34 +13,19 @@ import NoteLetterButtons from './NoteLetterButtons';
 import OctaveButtons from './OctaveButtons';
 import VoiceToggle from './VoiceToggle';
 
-const NotationInput = () => {
+interface Props {
+  voice1: Voice;
+  voice2: Voice;
+  setVoice1: React.Dispatch<React.SetStateAction<Voice>>;
+  setVoice2: React.Dispatch<React.SetStateAction<Voice>>;
+}
+
+const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
+  const [abcString, setAbcString] = useState('');
   const [noteValue, setNoteValue] = useState('1');
   const [noteLetter, setNoteLetter] = useState('C');
   const [octave, setOctave] = useState('4');
   const [currentVoice, setCurrentVoice] = useState('1');
-  const [voice2, setVoice2] = useState<Voice>({
-    key: 'C',
-    timeSignature: '4/4',
-    clef: 'bass',
-    cantus: false,
-    measures: [
-      {
-        notes: [],
-      },
-    ],
-  });
-  const [voice1, setVoice1] = useState<Voice>({
-    key: 'C',
-    timeSignature: '4/4',
-    clef: 'treble',
-    cantus: false,
-    measures: [
-      {
-        notes: [],
-      },
-    ],
-  });
-  const [abcString, setAbcString] = useState('');
 
   useEffect(() => {
     const music = {
@@ -62,8 +47,6 @@ const NotationInput = () => {
 
     const voice = Number(currentVoice) === 1 ? voice1 : voice2;
     const setVoice = Number(currentVoice) === 1 ? setVoice1 : setVoice2;
-
-    console.log(voice);
 
     // Need to use JSON.parse() here so that deeper objects are cloned and note referenced!
     const measures = JSON.parse(JSON.stringify(voice)).measures;
