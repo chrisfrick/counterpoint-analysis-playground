@@ -103,8 +103,6 @@ w: ${counterpointObject.intervals().join(' ')}
 [V: V2] ${lowerVoiceRenderArr.join('')}|]
 `;
 
-  console.log(abcString);
-
   const testString = `
 M: 4/4
 L: 1

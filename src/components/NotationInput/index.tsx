@@ -3,7 +3,10 @@ import { Measure, Note, Voice } from '../../types';
 import { Stack, Typography, Button } from '@mui/material';
 
 import Notation from '../Notation';
-import { singleVoiceToAbc } from '../../musicObjectToAbcNotation';
+import {
+  musicObjectToAbcNotation,
+  singleVoiceToAbc,
+} from '../../musicObjectToAbcNotation';
 import { calculateMeasureLength } from '../../utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
@@ -40,15 +43,15 @@ const NotationInput = () => {
   const [abcString, setAbcString] = useState('');
 
   useEffect(() => {
-    const noteString = singleVoiceToAbc(voice1);
-    const newAbcString = `
-    M: ${voice1.timeSignature}
-    L: 1
-    K: ${voice1.key}
-    ${noteString}|]
-    `;
+    const music = {
+      key: 'C',
+      timeSignature: '4/4',
+      voice1,
+      voice2,
+    };
+    const newAbcString = musicObjectToAbcNotation(music);
     setAbcString(newAbcString);
-  }, [voice1]);
+  }, [voice1, voice2]);
 
   const handleNewNote = () => {
     const pitch = noteLetter.concat(octave);
@@ -57,8 +60,13 @@ const NotationInput = () => {
       duration: noteValue,
     };
 
+    const voice = Number(currentVoice) === 1 ? voice1 : voice2;
+    const setVoice = Number(currentVoice) === 1 ? setVoice1 : setVoice2;
+
+    console.log(voice);
+
     // Need to use JSON.parse() here so that deeper objects are cloned and note referenced!
-    const measures = JSON.parse(JSON.stringify(voice1)).measures;
+    const measures = JSON.parse(JSON.stringify(voice)).measures;
     const lastMeasure = measures[measures.length - 1];
     const lastMeasureLength = calculateMeasureLength(lastMeasure);
 
@@ -67,7 +75,7 @@ const NotationInput = () => {
       const newMeasure = {
         notes: [newNote],
       };
-      setVoice1({ ...voice1, measures: [...measures, newMeasure] });
+      setVoice({ ...voice, measures: [...measures, newMeasure] });
       return;
     }
 
@@ -80,8 +88,26 @@ const NotationInput = () => {
     }
     const updatedMeasures = [...measures];
     updatedMeasures[updatedMeasures.length - 1] = lastMeasure;
-    const updatedVoice = { ...voice1, measures: updatedMeasures };
-    setVoice1(updatedVoice);
+    const updatedVoice = { ...voice, measures: updatedMeasures };
+    setVoice(updatedVoice);
+  };
+
+  const handleDelete = () => {
+    const voice = Number(currentVoice) === 1 ? voice1 : voice2;
+    const setVoice = Number(currentVoice) === 1 ? setVoice1 : setVoice2;
+
+    // Need to use JSON.parse() here so that deeper objects are cloned and note referenced!
+    const updatedMeasures = JSON.parse(JSON.stringify(voice)).measures;
+    const lastMeasure = updatedMeasures[updatedMeasures.length - 1];
+    lastMeasure.notes.pop();
+    if (
+      calculateMeasureLength(lastMeasure) === 0 &&
+      updatedMeasures.length > 1
+    ) {
+      updatedMeasures.pop();
+    }
+    const updatedVoice = { ...voice, measures: updatedMeasures };
+    setVoice(updatedVoice);
   };
 
   return (
@@ -98,12 +124,16 @@ const NotationInput = () => {
 
         <OctaveButtons octave={octave} setOctave={setOctave} />
 
-        <Button variant="outlined" onClick={handleNewNote}>
+        <Button variant="contained" onClick={handleNewNote}>
           Add Note
+        </Button>
+
+        <Button variant="outlined" onClick={handleDelete}>
+          Delete
         </Button>
       </Stack>
 
-      <Stack direction="row" pt={2}>
+      <Stack direction="row" alignItems="baseline">
         <VoiceToggle
           currentVoice={currentVoice}
           setCurrentVoice={setCurrentVoice}

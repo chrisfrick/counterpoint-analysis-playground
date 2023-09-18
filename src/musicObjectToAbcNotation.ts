@@ -25,17 +25,12 @@ export const singleVoiceToAbc = (voice: Voice) => {
 };
 
 export const musicObjectToAbcNotation = (musicObject: Music) => {
-  console.log(musicObject);
   const voice1 = musicObject.voice1;
   const voice2 = musicObject.voice2;
 
   const cantus = musicObject.voice2.cantus ? voice2 : voice1;
-  console.log(cantus.measures);
 
-  console.log(singleVoiceToAbc(voice1));
   const abcNotation = `
-T: Title
-C: Composer
 M: ${musicObject.timeSignature}
 L: 1
 K: ${musicObject.key}
