@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Voice } from './types';
 import MelodicErrorList from './components/MelodicErrors';
-import NotationInput from './components/NotationInput';
+import NotationInput from './components/NotationInput/NotationInput';
 import { Divider, Stack, Typography } from '@mui/material';
 
 const App = () => {

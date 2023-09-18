@@ -75,7 +75,7 @@ const MelodicErrorList = ({ voice }: Props) => {
       {errors.leapsResolveAppropriately[0]?.severity !== 0 ? (
         <List component="div" dense={true} sx={{ pl: 3 }}>
           {errors.leapsResolveAppropriately.map((error) => (
-            <ListItem key={(error.measureIndex, error.noteIndex)}>
+            <ListItem key={`${error.measureIndex}${error.noteIndex}`}>
               <ListItemIcon></ListItemIcon>
               <Typography>
                 Measure {error.measureIndex ? error.measureIndex + 1 : null}
