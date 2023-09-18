@@ -39,7 +39,6 @@ const calculateIntervals = (music: Music) => {
         )
       );
   }
-
   return intervals;
 };
 
@@ -58,9 +57,10 @@ K: ${musicObject.key}
 V: v1 clef="${voice1.clef}"
 V: v2 clef="${voice2.clef}"
 [V: v1] ${singleVoiceToAbc(voice1)}|]
-w: ${calculateIntervals(musicObject).join(' ')}
+w: ${calculateIntervals(musicObject)
+    .map((i) => i.split('').reverse().join(''))
+    .join(' ')}
 [V: v2] ${singleVoiceToAbc(voice2)}|]
-
 `;
   return abcNotation;
 };
