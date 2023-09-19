@@ -6,6 +6,7 @@ import {
   extractNotesFromSingleVoice,
 } from './utils';
 
+// TODO: Centralize all first species harmonic analysis errors into one location so it can be read and accessed when converting to ABC notation for display
 export const calculateMotion = (music: Music) => {
   const voice1Motion = calculateMelodicIntervals(music.voice1);
   const voice2Motion = calculateMelodicIntervals(music.voice2);
@@ -43,12 +44,17 @@ export const calculateIntervals = (music: Music) => {
   const shorterVoice =
     voice1Notes.length < voice2Notes.length ? voice1Notes : voice2Notes;
   if (voice2Notes.length > 0 && voice1Notes.length > 0) {
-    for (let i = 0; i < shorterVoice.length; i++)
-      intervals.push(
-        Interval.simplify(
-          Interval.distance(voice2Notes[i].pitch, voice1Notes[i].pitch)
-        )
+    for (let i = 0; i < shorterVoice.length; i++) {
+      const interval = Interval.distance(
+        voice2Notes[i].pitch,
+        voice1Notes[i].pitch
       );
+      let simpleInterval = Interval.simplify(interval);
+      if (interval !== '1P' && simpleInterval === '1P') {
+        simpleInterval = '8P';
+      }
+      intervals.push(simpleInterval);
+    }
   }
   return intervals;
 };
