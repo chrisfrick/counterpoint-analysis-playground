@@ -6,6 +6,19 @@ import {
   extractNotesFromSingleVoice,
 } from './utils';
 
+const counterpointErrors = {
+  // measureIndex
+  0: {
+    // noteIndex
+    0: {
+      type: 'ParallelOctave',
+      message: 'parallel octave',
+    },
+  },
+  1: {},
+  2: {},
+};
+
 // TODO: Centralize all first species harmonic analysis errors into one location so it can be read and accessed when converting to ABC notation for display
 export const calculateMotion = (music: Music) => {
   const voice1Motion = calculateMelodicIntervals(music.voice1);
@@ -43,6 +56,7 @@ export const calculateIntervals = (music: Music) => {
   const voice2Notes = extractNotesFromSingleVoice(music.voice2);
   const shorterVoice =
     voice1Notes.length < voice2Notes.length ? voice1Notes : voice2Notes;
+  const errors = {};
   if (voice2Notes.length > 0 && voice1Notes.length > 0) {
     for (let i = 0; i < shorterVoice.length; i++) {
       const interval = Interval.distance(
@@ -56,5 +70,8 @@ export const calculateIntervals = (music: Music) => {
       intervals.push(simpleInterval);
     }
   }
-  return intervals;
+  return {
+    intervals,
+    errors,
+  };
 };

@@ -12,7 +12,7 @@ import {
 import { Snackbar } from '@mui/material';
 
 import Notation from '../Notation';
-import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
+import { firstSpeciesToAbc } from '../../musicObjectToAbcNotation';
 import { calculateMeasureLength } from '../../utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
@@ -25,9 +25,18 @@ interface Props {
   voice2: Voice;
   setVoice1: React.Dispatch<React.SetStateAction<Voice>>;
   setVoice2: React.Dispatch<React.SetStateAction<Voice>>;
+  checkTritones: boolean;
+  showMotion: boolean;
 }
 
-const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
+const NotationInput = ({
+  voice1,
+  setVoice1,
+  voice2,
+  setVoice2,
+  checkTritones,
+  showMotion,
+}: Props) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [abcString, setAbcString] = useState('');
@@ -44,7 +53,7 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
       voice1,
       voice2,
     };
-    const newAbcString = musicObjectToAbcNotation(music);
+    const newAbcString = firstSpeciesToAbc(music, checkTritones, showMotion);
     setAbcString(newAbcString);
   }, [voice1, voice2]);
 

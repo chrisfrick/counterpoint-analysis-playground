@@ -6,7 +6,11 @@ import {
 } from './firstSpeciesHarmonicAnalysis';
 import { isTritone } from './utils';
 
-export const firstSpeciesToAbc = (music: Music) => {
+export const firstSpeciesToAbc = (
+  music: Music,
+  checkTritones: boolean,
+  showMotion: boolean
+) => {
   const scaleName = music.key.includes('m')
     ? `${music.key} minor`
     : `${music.key} major`;
@@ -23,10 +27,13 @@ export const firstSpeciesToAbc = (music: Music) => {
       voice2Abc = voice2Abc.concat(
         AbcNotation.scientificToAbcNotation(note.pitch),
         note.duration,
-        ' '
+        'y'
       );
     });
   });
+
+  const motion = calculateMotion(music);
+  let motionIndexCount = 0;
 
   let voice1Abc = '';
   music.voice1.measures.forEach((measure, measureIndex) => {
@@ -35,43 +42,71 @@ export const firstSpeciesToAbc = (music: Music) => {
         voice1Abc = voice1Abc.concat('|');
       }
       // Check for tritones
-      if (
-        isTritone(
-          Interval.simplify(
-            Interval.distance(
-              music.voice2.measures[measureIndex]?.notes[noteIndex]?.pitch,
-              music.voice1.measures[measureIndex]?.notes[noteIndex]?.pitch
+      if (checkTritones) {
+        if (
+          isTritone(
+            Interval.simplify(
+              Interval.distance(
+                music.voice2.measures[measureIndex]?.notes[noteIndex]?.pitch,
+                music.voice1.measures[measureIndex]?.notes[noteIndex]?.pitch
+              )
             )
           )
-        )
-      ) {
-        voice1Abc = voice1Abc.concat(`"^tritone!"`);
+        ) {
+          voice1Abc = voice1Abc.concat(`"^tritone!"`);
+        }
       }
+
+      // Add the note name and duration
       voice1Abc = voice1Abc.concat(
         AbcNotation.scientificToAbcNotation(note.pitch),
-        note.duration,
-        ' '
+        note.duration
       );
+
+      // Add motion
+      if (showMotion) {
+        const currentMotion = motion[motionIndexCount] || ' ';
+        voice1Abc = voice1Abc.concat(
+          // Add motion notation below voice1
+          `"_${currentMotion[0]}"y`
+        );
+        motionIndexCount += 1;
+      } else {
+        voice1Abc = voice1Abc.concat('y');
+      }
     });
   });
 
-  // Add motion notation below voice1
-  const motion = calculateMotion(music);
-  console.log(motion);
+  // Make intervals on lyric line
+  const wLineAbc = calculateIntervals(music)
+    .intervals.map((i) => i.split('').reverse().join(''))
+    .join(' ');
 
-  return {
-    voice1Abc,
-    voice2Abc,
-  };
+  const abcNotation = `
+M: ${music.timeSignature}
+L: 1
+K: ${music.key}
+%%staves [v1, v2]
+V: v1 clef="${music.voice1.clef}"
+V: v2 clef="${music.voice2.clef}"
+[V: v1] ${voice1Abc}|]
+w: ${wLineAbc}
+[V: v2] ${voice2Abc}|]
+`;
+  return abcNotation;
 };
 
-export const musicObjectToAbcNotation = (musicObject: Music) => {
+/*
+export const OLDmusicObjectToAbcNotation = (musicObject: Music) => {
   const voice1 = musicObject.voice1;
   const voice2 = musicObject.voice2;
 
   const cantus = musicObject.voice2.cantus ? voice2 : voice1;
 
-  const abcObject = firstSpeciesToAbc(musicObject);
+  // TODO: remove hardcoded booleans in this function
+  const checkTritones = true;
+  const checkMotion = true;
+  const abcObject = firstSpeciesToAbc(musicObject, checkTritones, checkMotion);
   const abcNotation = `
 M: ${musicObject.timeSignature}
 L: 1
@@ -80,10 +115,9 @@ K: ${musicObject.key}
 V: v1 clef="${voice1.clef}"
 V: v2 clef="${voice2.clef}"
 [V: v1] ${abcObject.voice1Abc}|]
-w: ${calculateIntervals(musicObject)
-    .map((i) => i.split('').reverse().join(''))
-    .join(' ')}
+w: ${abcObject.wLineAbc}
 [V: v2] ${abcObject.voice2Abc}|]
 `;
   return abcNotation;
 };
+*/

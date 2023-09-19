@@ -7,8 +7,11 @@ import {
   AccordionDetails,
   AccordionSummary,
   Card,
+  Checkbox,
   Container,
   Grid,
+  List,
+  ListItem,
   Typography,
 } from '@mui/joy';
 
@@ -46,6 +49,9 @@ const App = () => {
     ],
   });
 
+  const [checkTritones, setCheckTritones] = useState(true);
+  const [showMotion, setShowMotion] = useState(false);
+
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -55,7 +61,32 @@ const App = () => {
             voice2={voice2}
             setVoice1={setVoice1}
             setVoice2={setVoice2}
+            checkTritones={checkTritones}
+            showMotion={showMotion}
           />
+
+          <List
+            variant="outlined"
+            orientation="horizontal"
+            sx={{ '--List-padding': '8px', '--List-radius': '8px' }}
+          >
+            <ListItem>
+              <Checkbox
+                checked={checkTritones}
+                label="Check for tritones"
+                size="lg"
+                onChange={(event) => setCheckTritones(event.target.checked)}
+              />
+            </ListItem>
+            <ListItem>
+              <Checkbox
+                checked={showMotion}
+                label="Show motion"
+                size="lg"
+                onChange={(event) => setShowMotion(event.target.checked)}
+              />
+            </ListItem>
+          </List>
 
           <Accordion defaultExpanded={true}>
             <AccordionSummary>
