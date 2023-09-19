@@ -74,6 +74,18 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
       setOtherVoice = setVoice1;
     }
 
+    // For First Species: check if other voice has the same note value in this position
+    if (
+      otherVoice.measures.length >= thisVoice.measures.length && // Other voice is longer
+      otherVoice.measures[thisVoice.measures.length - 1].notes.length > 0 && // Other voice has notes in this measure
+      otherVoice.measures[thisVoice.measures.length - 1].notes[
+        otherVoice.measures[thisVoice.measures.length - 1].notes.length - 1
+      ].duration !== newNote.duration // The new note I'm trying to add is the same duration as that note in this position in the other voice
+    ) {
+      setSnackbarMessage('Note value does not match the other voice');
+      setSnackbarOpen(true);
+      return;
+    }
     // Need to use JSON.parse() here so that deeper objects are cloned and not referenced!
     const measures = JSON.parse(JSON.stringify(thisVoice)).measures;
     const lastMeasure = measures[measures.length - 1];
