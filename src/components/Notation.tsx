@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import abcjs from 'abcjs';
 import './Notation.css';
+import { Box, Sheet } from '@mui/joy';
 
 interface NotationProps {
   abcString: string;
@@ -27,9 +28,9 @@ const Notation = ({ abcString }: NotationProps) => {
 
   const text = document.querySelectorAll('.abcjs-annotation');
   return (
-    <div style={{ width: 900 }}>
-      <div ref={notation}></div>
-    </div>
+    <Box sx={{ width: 1, mt: 1, mb: 1 }}>
+      <Sheet variant="outlined" color="neutral" ref={notation}></Sheet>
+    </Box>
   );
 };
 

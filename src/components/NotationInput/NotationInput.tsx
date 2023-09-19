@@ -55,7 +55,7 @@ const NotationInput = ({
     };
     const newAbcString = firstSpeciesToAbc(music, checkTritones, showMotion);
     setAbcString(newAbcString);
-  }, [voice1, voice2]);
+  }, [voice1, voice2, checkTritones, showMotion]);
 
   const handleSnackbarClose = () => setSnackbarOpen(false);
 
@@ -197,15 +197,13 @@ const NotationInput = ({
         <Select value={species}>
           <Option value="First Species">First Species</Option>
         </Select>
-      </Stack>
-
-      <Stack direction="row" alignItems="baseline">
         <VoiceToggle
           currentVoice={currentVoice}
           setCurrentVoice={setCurrentVoice}
         />
-        <Notation abcString={abcString} />
       </Stack>
+
+      <Notation abcString={abcString} />
     </div>
   );
 };
