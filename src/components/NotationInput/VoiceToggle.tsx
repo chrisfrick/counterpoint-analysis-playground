@@ -1,4 +1,4 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Button, ToggleButtonGroup } from '@mui/joy';
 
 interface Props {
   currentVoice: string;
@@ -19,11 +19,10 @@ const VoiceToggle = ({ currentVoice, setCurrentVoice }: Props) => {
     <ToggleButtonGroup
       orientation="vertical"
       value={currentVoice}
-      exclusive
       onChange={handleVoiceToggle}
     >
-      <ToggleButton value="1">Upper Voice (u)</ToggleButton>
-      <ToggleButton value="2">Lower Voice (l)</ToggleButton>
+      <Button value="1">Upper Voice (u)</Button>
+      <Button value="2">Lower Voice (l)</Button>
     </ToggleButtonGroup>
   );
 };

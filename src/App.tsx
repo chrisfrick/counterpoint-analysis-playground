@@ -6,15 +6,20 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Card,
   Container,
-  Divider,
   Grid,
-  Stack,
   Typography,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+} from '@mui/joy';
+
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from '@mui/material/styles';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+
+const materialTheme = materialExtendTheme();
 
 const App = () => {
   const [voice2, setVoice2] = useState<Voice>({
@@ -42,36 +47,40 @@ const App = () => {
   });
 
   return (
-    <Container>
-      <NotationInput
-        voice1={voice1}
-        voice2={voice2}
-        setVoice1={setVoice1}
-        setVoice2={setVoice2}
-      />
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider>
+        <Container>
+          <NotationInput
+            voice1={voice1}
+            voice2={voice2}
+            setVoice1={setVoice1}
+            setVoice2={setVoice2}
+          />
 
-      <Accordion defaultExpanded={true}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="h4">Melodic Analysis</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5">Upper Voice</Typography>
-                <MelodicErrorList voice={voice1} />
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ p: 2 }}>
-                <Typography variant="h5">Lower Voice</Typography>
-                <MelodicErrorList voice={voice2} />
-              </Card>
-            </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    </Container>
+          <Accordion defaultExpanded={true}>
+            <AccordionSummary>
+              <Typography level="h3">Melodic Analysis</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={2}>
+                <Grid xs={12} md={6}>
+                  <Card variant="outlined" sx={{ p: 2 }}>
+                    <Typography level="h4">Upper Voice</Typography>
+                    <MelodicErrorList voice={voice1} />
+                  </Card>
+                </Grid>
+                <Grid xs={12} md={6}>
+                  <Card variant="outlined" sx={{ p: 2 }}>
+                    <Typography level="h4">Lower Voice</Typography>
+                    <MelodicErrorList voice={voice2} />
+                  </Card>
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Container>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
 };
 

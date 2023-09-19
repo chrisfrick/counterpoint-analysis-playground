@@ -1,10 +1,10 @@
 import {
+  Button,
   Stack,
-  ToggleButton,
   ToggleButtonGroup,
   Tooltip,
   Typography,
-} from '@mui/material';
+} from '@mui/joy';
 
 interface Props {
   noteLetter: string;
@@ -25,17 +25,13 @@ const NoteLetterButtons = ({ noteLetter, setNoteLetter }: Props) => {
 
   return (
     <Stack direction="row">
-      <ToggleButtonGroup
-        value={noteLetter}
-        exclusive
-        onChange={handleNoteLetter}
-      >
+      <ToggleButtonGroup value={noteLetter} onChange={handleNoteLetter}>
         {letters.map((letter) => (
-          <ToggleButton value={letter} key={letter}>
+          <Button value={letter} key={letter}>
             <Tooltip title={`(${letter.toLowerCase()})`}>
               <Typography>{letter}</Typography>
             </Tooltip>
-          </ToggleButton>
+          </Button>
         ))}
       </ToggleButtonGroup>
     </Stack>

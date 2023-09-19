@@ -1,4 +1,4 @@
-import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Stack, Button, ToggleButtonGroup } from '@mui/joy';
 
 interface Props {
   octave: string;
@@ -16,14 +16,14 @@ const OctaveButtons = ({ octave, setOctave }: Props) => {
 
   return (
     <Stack direction="row">
-      <ToggleButtonGroup value={octave} exclusive onChange={handleOctave}>
-        <ToggleButton value="1">1</ToggleButton>
-        <ToggleButton value="2">2</ToggleButton>
-        <ToggleButton value="3">3</ToggleButton>
-        <ToggleButton value="4">4</ToggleButton>
-        <ToggleButton value="5">5</ToggleButton>
-        <ToggleButton value="6">6</ToggleButton>
-        <ToggleButton value="7">7</ToggleButton>
+      <ToggleButtonGroup value={octave} onChange={handleOctave}>
+        <Button value="1">1</Button>
+        <Button value="2">2</Button>
+        <Button value="3">3</Button>
+        <Button value="4">4</Button>
+        <Button value="5">5</Button>
+        <Button value="6">6</Button>
+        <Button value="7">7</Button>
       </ToggleButtonGroup>
     </Stack>
   );

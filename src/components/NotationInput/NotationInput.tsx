@@ -5,10 +5,11 @@ import {
   Button,
   Tooltip,
   Select,
-  MenuItem,
-  Snackbar,
+  Option,
   Alert,
-} from '@mui/material';
+  Container,
+} from '@mui/joy';
+import { Snackbar } from '@mui/material';
 
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
@@ -158,14 +159,11 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
         autoHideDuration={6000}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <Alert severity="error" variant="filled">
+        <Alert color="danger" variant="solid">
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Stack direction="row" spacing={3}>
-        <Select value={species}>
-          <MenuItem value="First Species">First Species</MenuItem>
-        </Select>
+      <Stack direction="row" justifyContent="flex-start" spacing={3}>
         <NoteValueButtons noteValue={noteValue} setNoteValue={setNoteValue} />
 
         <NoteLetterButtons
@@ -174,9 +172,8 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
         />
 
         <OctaveButtons octave={octave} setOctave={setOctave} />
-
         <Tooltip title="(enter)">
-          <Button variant="contained" onClick={handleNewNote}>
+          <Button variant="solid" onClick={handleNewNote}>
             Add Note
           </Button>
         </Tooltip>
@@ -186,6 +183,11 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
             Delete
           </Button>
         </Tooltip>
+      </Stack>
+      <Stack direction="row" justifyContent="flex-start" spacing={3} pt={1}>
+        <Select value={species}>
+          <Option value="First Species">First Species</Option>
+        </Select>
       </Stack>
 
       <Stack direction="row" alignItems="baseline">
