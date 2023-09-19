@@ -1,6 +1,7 @@
 import { Scale, Note, Range, Interval } from 'tonal';
 import { Error, Note as NoteType, Voice } from './types';
-import { extractNotesFromSingleVoice } from './components/Experiments/utils';
+import { extractNotesFromSingleVoice } from './utils';
+import { calculateMelodicIntervals } from './utils';
 
 const usesCadenceFormula = (notes: NoteType[], key: string): Error => {
   const scale = Scale.degrees(key + ' major');
@@ -91,22 +92,7 @@ const rangeIsWithinAnOctave = (notes: NoteType[]): Error => {
 };
 
 const usesMostlyStepwiseMotion = (melody: Voice): Error => {
-  let prevNote: NoteType;
-  let currentNote: NoteType;
-  const melodicIntervals: string[] = [];
-
-  melody.measures.forEach((measure, measureIndex, measureArr) => {
-    measure.notes.forEach((note, noteIndex, noteArr) => {
-      if (measureIndex === 0 && noteIndex === 0) {
-        currentNote = melody.measures[0].notes[0];
-        return;
-      }
-      prevNote = currentNote;
-      currentNote = noteArr[noteIndex];
-      const distance = Interval.distance(prevNote.pitch, currentNote.pitch);
-      melodicIntervals.push(distance);
-    });
-  });
+  const melodicIntervals = calculateMelodicIntervals(melody);
 
   const melodicIntervalNumbers = melodicIntervals.map((interval) => {
     const intNumber = Interval.get(interval).num;

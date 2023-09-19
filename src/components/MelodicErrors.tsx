@@ -36,7 +36,7 @@ const MelodicErrorList = ({ voice }: Props) => {
         <ListItemIcon>{icon(errors.cadenceFormula.severity)}</ListItemIcon>
         <ListItemText>
           <Typography>
-            Cadence Formula
+            Cadence formula
             {errors.cadenceFormula.severity !== 0
               ? ': ' + errors.cadenceFormula.message
               : ' used correctly'}

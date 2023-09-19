@@ -12,7 +12,7 @@ import {
 
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
-import { calculateMeasureLength } from '../Experiments/utils';
+import { calculateMeasureLength } from '../../utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
 import OctaveButtons from './OctaveButtons';

@@ -1,5 +1,4 @@
 import { Interval, AbcNotation, Scale, Note } from 'tonal';
-import { Measure, Voice } from '../../types';
 
 export const abcSplit = (abcNotation: string) =>
   abcNotation.split(/(?=[A-Za-z])/);
@@ -95,28 +94,4 @@ export const usesCadenceFormula = (voice: string[], key: string) => {
   }
 
   return false;
-};
-
-export const noteLengthToDecimal = (noteLength: string) => {
-  if (Number(noteLength)) {
-    return Number(noteLength);
-  }
-  const split = noteLength.split('/');
-  const result = Number(split[0]) / Number(split[1]);
-  return result;
-};
-
-export const calculateMeasureLength = (measure: Measure) =>
-  measure.notes.reduce(
-    (measureLength, note) => noteLengthToDecimal(note.duration) + measureLength,
-    0
-  );
-
-export const extractNotesFromSingleVoice = (voice: Voice) => {
-  const notes = voice.measures
-    .map((measure) => {
-      return measure.notes;
-    })
-    .flat();
-  return notes;
 };

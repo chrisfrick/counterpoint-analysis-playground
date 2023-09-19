@@ -2,7 +2,19 @@ import { useState } from 'react';
 import { Voice } from './types';
 import MelodicErrorList from './components/MelodicErrors';
 import NotationInput from './components/NotationInput/NotationInput';
-import { Divider, Stack, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const App = () => {
   const [voice2, setVoice2] = useState<Voice>({
@@ -30,30 +42,36 @@ const App = () => {
   });
 
   return (
-    <div>
+    <Container>
       <NotationInput
         voice1={voice1}
         voice2={voice2}
         setVoice1={setVoice1}
         setVoice2={setVoice2}
       />
-      <Typography variant="h4">Melodic Analysis</Typography>
 
-      <Stack
-        direction="row"
-        spacing={5}
-        divider={<Divider orientation="vertical" flexItem />}
-      >
-        <div>
-          <Typography variant="h5">Upper Voice</Typography>
-          <MelodicErrorList voice={voice1} />
-        </div>
-        <div>
-          <Typography variant="h5">Lower Voice</Typography>
-          <MelodicErrorList voice={voice2} />
-        </div>
-      </Stack>
-    </div>
+      <Accordion defaultExpanded={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h4">Melodic Analysis</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Card variant="outlined" sx={{ p: 2 }}>
+                <Typography variant="h5">Upper Voice</Typography>
+                <MelodicErrorList voice={voice1} />
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card variant="outlined" sx={{ p: 2 }}>
+                <Typography variant="h5">Lower Voice</Typography>
+                <MelodicErrorList voice={voice2} />
+              </Card>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+    </Container>
   );
 };
 
