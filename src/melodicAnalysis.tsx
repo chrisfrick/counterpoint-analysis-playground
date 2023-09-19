@@ -1,6 +1,6 @@
 import { Scale, Note, Range, Interval } from 'tonal';
 import { Error, Note as NoteType, Voice } from './types';
-import { extractNotesFromSingleVoice } from './utils';
+import { extractNotesFromSingleVoice } from './components/Experiments/utils';
 
 const usesCadenceFormula = (notes: NoteType[], key: string): Error => {
   const scale = Scale.degrees(key + ' major');

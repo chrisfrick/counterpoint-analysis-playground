@@ -4,7 +4,7 @@ import { Stack, Typography, Button, Tooltip } from '@mui/material';
 
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
-import { calculateMeasureLength } from '../../utils';
+import { calculateMeasureLength } from '../Experiments/utils';
 import NoteValueButtons from './NoteValueButtons';
 import NoteLetterButtons from './NoteLetterButtons';
 import OctaveButtons from './OctaveButtons';

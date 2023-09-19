@@ -1,6 +1,6 @@
 import { AbcNotation, Interval, Scale } from 'tonal';
 import { Music, Voice } from './types';
-import { extractNotesFromSingleVoice } from './utils';
+import { extractNotesFromSingleVoice } from './components/Experiments/utils';
 
 export const singleVoiceToAbc = (voice: Voice) => {
   const scaleName = voice.key.includes('m')

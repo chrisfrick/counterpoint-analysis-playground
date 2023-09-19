@@ -4,7 +4,7 @@ import {
   calculateMotion,
   isTritone,
   usesCadenceFormula,
-} from '../../utils';
+} from './utils';
 import { AbcNotation, Interval } from 'tonal';
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';

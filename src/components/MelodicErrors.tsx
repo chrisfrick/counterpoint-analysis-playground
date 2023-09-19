@@ -10,7 +10,7 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import { Error, MelodicErrors, Voice } from '../types';
-import { melodicAnalysis } from '../melodic-analysis';
+import { melodicAnalysis } from '../melodicAnalysis';
 
 interface Props {
   voice: Voice;

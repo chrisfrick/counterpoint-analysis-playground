@@ -1,5 +1,5 @@
 import { Interval, AbcNotation, Scale, Note } from 'tonal';
-import { Measure, Voice } from './types';
+import { Measure, Voice } from '../../types';
 
 export const abcSplit = (abcNotation: string) =>
   abcNotation.split(/(?=[A-Za-z])/);
