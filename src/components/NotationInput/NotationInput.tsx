@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Note, Voice } from '../../types';
-import { Stack, Typography, Button, Tooltip } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Tooltip,
+  Select,
+  MenuItem,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 
 import Notation from '../Notation';
 import { musicObjectToAbcNotation } from '../../musicObjectToAbcNotation';
@@ -19,11 +27,14 @@ interface Props {
 }
 
 const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [abcString, setAbcString] = useState('');
   const [noteValue, setNoteValue] = useState('1');
   const [noteLetter, setNoteLetter] = useState('C');
   const [octave, setOctave] = useState('4');
   const [currentVoice, setCurrentVoice] = useState('1');
+  const [species, setSpecies] = useState('First Species');
 
   useEffect(() => {
     const music = {
@@ -36,6 +47,8 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
     setAbcString(newAbcString);
   }, [voice1, voice2]);
 
+  const handleSnackbarClose = () => setSnackbarOpen(false);
+
   const handleNewNote = () => {
     const pitch = noteLetter.concat(octave);
     const newNote: Note = {
@@ -44,11 +57,25 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
     };
     console.log(newNote);
 
-    const voice = Number(currentVoice) === 1 ? voice1 : voice2;
-    const setVoice = Number(currentVoice) === 1 ? setVoice1 : setVoice2;
+    let thisVoice;
+    let setThisVoice;
+    let otherVoice;
+    let setOtherVoice;
 
-    // Need to use JSON.parse() here so that deeper objects are cloned and note referenced!
-    const measures = JSON.parse(JSON.stringify(voice)).measures;
+    if (Number(currentVoice) === 1) {
+      thisVoice = voice1;
+      setThisVoice = setVoice1;
+      otherVoice = voice2;
+      setOtherVoice = setVoice2;
+    } else {
+      thisVoice = voice2;
+      setThisVoice = setVoice2;
+      otherVoice = voice1;
+      setOtherVoice = setVoice1;
+    }
+
+    // Need to use JSON.parse() here so that deeper objects are cloned and not referenced!
+    const measures = JSON.parse(JSON.stringify(thisVoice)).measures;
     const lastMeasure = measures[measures.length - 1];
     const lastMeasureLength = calculateMeasureLength(lastMeasure);
 
@@ -57,7 +84,7 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
       const newMeasure = {
         notes: [newNote],
       };
-      setVoice({ ...voice, measures: [...measures, newMeasure] });
+      setThisVoice({ ...thisVoice, measures: [...measures, newMeasure] });
       return;
     }
 
@@ -65,13 +92,14 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
 
     // Check if the new note would overflow the measure
     if (calculateMeasureLength(lastMeasure) > 1) {
-      alert('Too many beats in this measure');
+      setSnackbarMessage('Too many beats in this measure');
+      setSnackbarOpen(true);
       return;
     }
     const updatedMeasures = [...measures];
     updatedMeasures[updatedMeasures.length - 1] = lastMeasure;
-    const updatedVoice = { ...voice, measures: updatedMeasures };
-    setVoice(updatedVoice);
+    const updatedVoice = { ...thisVoice, measures: updatedMeasures };
+    setThisVoice(updatedVoice);
   };
 
   const handleDelete = () => {
@@ -111,9 +139,21 @@ const NotationInput = ({ voice1, setVoice1, voice2, setVoice2 }: Props) => {
 
   return (
     <div>
-      <Typography variant="h5">Notation Input</Typography>
-
+      <Snackbar
+        open={snackbarOpen}
+        onClose={handleSnackbarClose}
+        message={snackbarMessage}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert severity="error" variant="filled">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Stack direction="row" spacing={3}>
+        <Select value={species}>
+          <MenuItem value="First Species">First Species</MenuItem>
+        </Select>
         <NoteValueButtons noteValue={noteValue} setNoteValue={setNoteValue} />
 
         <NoteLetterButtons
