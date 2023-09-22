@@ -95,10 +95,11 @@ const NotationInput = ({
         ? 0
         : thisVoice.measures[measureIndex].notes.length;
 
+    console.log('measure index', measureIndex);
+    console.log('note index', noteIndex);
+
     if (
-      (otherVoice.measures.length >= thisVoice.measures.length ||
-        otherVoice.measures[measureIndex]?.notes.length >
-          thisVoice.measures[measureIndex].notes.length) && // Other voice is longer
+      otherVoice.measures[measureIndex]?.notes &&
       otherVoice.measures[measureIndex].notes.length > 0 && // Other voice has notes in this measure
       otherVoice.measures[measureIndex].notes[noteIndex].duration !==
         newNote.duration // The new note I'm trying to add is the same duration as that note in this position in the other voice
