@@ -16,11 +16,7 @@ const VoiceToggle = ({ currentVoice, setCurrentVoice }: Props) => {
   };
 
   return (
-    <ToggleButtonGroup
-      orientation="vertical"
-      value={currentVoice}
-      onChange={handleVoiceToggle}
-    >
+    <ToggleButtonGroup value={currentVoice} onChange={handleVoiceToggle}>
       <Button value="1">Upper Voice (u)</Button>
       <Button value="2">Lower Voice (l)</Button>
     </ToggleButtonGroup>

@@ -65,41 +65,48 @@ const NotationInput = ({
       pitch,
       duration: noteValue,
     };
-    console.log(newNote);
 
     let thisVoice;
     let setThisVoice;
     let otherVoice;
-    let setOtherVoice;
 
     if (Number(currentVoice) === 1) {
       thisVoice = voice1;
       setThisVoice = setVoice1;
       otherVoice = voice2;
-      setOtherVoice = setVoice2;
     } else {
       thisVoice = voice2;
       setThisVoice = setVoice2;
       otherVoice = voice1;
-      setOtherVoice = setVoice1;
     }
 
+    // Need to use JSON.parse() here so that deeper objects are cloned and not referenced!
+    const measures = JSON.parse(JSON.stringify(thisVoice)).measures;
+    const lastMeasure = measures[measures.length - 1];
+    const lastMeasureLength = calculateMeasureLength(lastMeasure);
+
     // For First Species: check if other voice has the same note value in this position
+    const measureIndex =
+      lastMeasureLength === 1
+        ? thisVoice.measures.length
+        : thisVoice.measures.length - 1;
+    const noteIndex =
+      lastMeasureLength === 1
+        ? 0
+        : thisVoice.measures[measureIndex].notes.length;
+
     if (
-      otherVoice.measures.length >= thisVoice.measures.length && // Other voice is longer
-      otherVoice.measures[thisVoice.measures.length - 1].notes.length > 0 && // Other voice has notes in this measure
-      otherVoice.measures[thisVoice.measures.length - 1].notes[
-        otherVoice.measures[thisVoice.measures.length - 1].notes.length - 1
-      ].duration !== newNote.duration // The new note I'm trying to add is the same duration as that note in this position in the other voice
+      (otherVoice.measures.length >= thisVoice.measures.length ||
+        otherVoice.measures[measureIndex]?.notes.length >
+          thisVoice.measures[measureIndex].notes.length) && // Other voice is longer
+      otherVoice.measures[measureIndex].notes.length > 0 && // Other voice has notes in this measure
+      otherVoice.measures[measureIndex].notes[noteIndex].duration !==
+        newNote.duration // The new note I'm trying to add is the same duration as that note in this position in the other voice
     ) {
       setSnackbarMessage('Note value does not match the other voice');
       setSnackbarOpen(true);
       return;
     }
-    // Need to use JSON.parse() here so that deeper objects are cloned and not referenced!
-    const measures = JSON.parse(JSON.stringify(thisVoice)).measures;
-    const lastMeasure = measures[measures.length - 1];
-    const lastMeasureLength = calculateMeasureLength(lastMeasure);
 
     // Check if last measure is full
     if (lastMeasureLength === 1) {

@@ -54,7 +54,7 @@ const App = () => {
   });
 
   const [checkTritones, setCheckTritones] = useState(true);
-  const [showMotion, setShowMotion] = useState(false);
+  const [showMotion, setShowMotion] = useState(true);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
