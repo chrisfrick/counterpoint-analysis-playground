@@ -9,9 +9,11 @@ import {
   Card,
   Checkbox,
   Container,
+  CssBaseline,
   Grid,
   List,
   ListItem,
+  Sheet,
   Typography,
 } from '@mui/joy';
 
@@ -21,6 +23,8 @@ import {
   THEME_ID as MATERIAL_THEME_ID,
 } from '@mui/material/styles';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+import theme from './theme';
+import { AppBar } from '@mui/material';
 
 const materialTheme = materialExtendTheme();
 
@@ -54,8 +58,21 @@ const App = () => {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-      <JoyCssVarsProvider>
+      <JoyCssVarsProvider theme={theme}>
+        <CssBaseline />
         <Container>
+          <Typography
+            level="h1"
+            py={2}
+            sx={{
+              background: 'linear-gradient(to right bottom, #5bb9f0, #021017)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Harmony Helper
+          </Typography>
+
           <NotationInput
             voice1={voice1}
             voice2={voice2}
