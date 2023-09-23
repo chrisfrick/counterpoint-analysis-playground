@@ -87,22 +87,28 @@ const App = () => {
             orientation="horizontal"
             sx={{ '--List-padding': '8px', '--List-radius': '8px' }}
           >
-            <ListItem>
-              <Checkbox
-                checked={checkTritones}
-                label="Check for tritones"
-                size="lg"
-                onChange={(event) => setCheckTritones(event.target.checked)}
-              />
-            </ListItem>
-            <ListItem>
-              <Checkbox
-                checked={showMotion}
-                label="Show motion"
-                size="lg"
-                onChange={(event) => setShowMotion(event.target.checked)}
-              />
-            </ListItem>
+            <Grid container>
+              <Grid>
+                <ListItem>
+                  <Checkbox
+                    checked={checkTritones}
+                    label="Check for tritones"
+                    size="lg"
+                    onChange={(event) => setCheckTritones(event.target.checked)}
+                  />
+                </ListItem>
+              </Grid>
+              <Grid>
+                <ListItem>
+                  <Checkbox
+                    checked={showMotion}
+                    label="Show motion"
+                    size="lg"
+                    onChange={(event) => setShowMotion(event.target.checked)}
+                  />
+                </ListItem>
+              </Grid>
+            </Grid>
           </List>
 
           <Accordion defaultExpanded={true}>
