@@ -8,6 +8,8 @@ import {
   Option,
   Alert,
   Container,
+  Grid,
+  ToggleButtonGroup,
 } from '@mui/joy';
 import { Snackbar } from '@mui/material';
 
@@ -180,36 +182,62 @@ const NotationInput = ({
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Stack direction="row" justifyContent="flex-start" spacing={3}>
-        <NoteValueButtons noteValue={noteValue} setNoteValue={setNoteValue} />
+      <Grid
+        container
+        direction="row"
+        spacing={3}
+        justifyContent="flex-start"
+        sx={{ flexGrow: 1 }}
+      >
+        <Grid>
+          <NoteValueButtons noteValue={noteValue} setNoteValue={setNoteValue} />
+        </Grid>
 
-        <NoteLetterButtons
-          noteLetter={noteLetter}
-          setNoteLetter={setNoteLetter}
-        />
+        <Grid>
+          <NoteLetterButtons
+            noteLetter={noteLetter}
+            setNoteLetter={setNoteLetter}
+          />
+        </Grid>
 
-        <OctaveButtons octave={octave} setOctave={setOctave} />
-        <Tooltip title="(enter)">
-          <Button variant="solid" onClick={handleNewNote}>
-            Add Note
-          </Button>
-        </Tooltip>
+        <Grid>
+          <OctaveButtons octave={octave} setOctave={setOctave} />
+        </Grid>
+        <Grid>
+          <ToggleButtonGroup>
+            <Tooltip title="(enter)">
+              <Button variant="solid" color="neutral" onClick={handleNewNote}>
+                Add Note
+              </Button>
+            </Tooltip>
 
-        <Tooltip title="(backspace)">
-          <Button variant="outlined" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Tooltip>
-      </Stack>
-      <Stack direction="row" justifyContent="flex-start" spacing={3} pt={1}>
-        <Select value={species}>
-          <Option value="First Species">First Species</Option>
-        </Select>
-        <VoiceToggle
-          currentVoice={currentVoice}
-          setCurrentVoice={setCurrentVoice}
-        />
-      </Stack>
+            <Tooltip title="(backspace)">
+              <Button variant="soft" color="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </Tooltip>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        spacing={3}
+        pt={1}
+      >
+        <Grid>
+          <Select value={species}>
+            <Option value="First Species">First Species</Option>
+          </Select>
+        </Grid>
+        <Grid>
+          <VoiceToggle
+            currentVoice={currentVoice}
+            setCurrentVoice={setCurrentVoice}
+          />
+        </Grid>
+      </Grid>
 
       <Notation abcString={abcString} />
     </div>
