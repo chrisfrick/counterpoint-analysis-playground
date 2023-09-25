@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Note, Voice } from '../../types';
 import {
-  Stack,
   Button,
   Tooltip,
   Select,
   Option,
   Alert,
-  Container,
   Grid,
   ToggleButtonGroup,
 } from '@mui/joy';
@@ -96,9 +94,6 @@ const NotationInput = ({
       lastMeasureLength === 1
         ? 0
         : thisVoice.measures[measureIndex].notes.length;
-
-    console.log('measure index', measureIndex);
-    console.log('note index', noteIndex);
 
     if (
       otherVoice.measures[measureIndex]?.notes &&
@@ -227,7 +222,12 @@ const NotationInput = ({
         pt={1}
       >
         <Grid>
-          <Select value={species}>
+          <Select
+            value={species}
+            onChange={(event, newValue) =>
+              setSpecies(newValue ? newValue : 'First Species')
+            }
+          >
             <Option value="First Species">First Species</Option>
           </Select>
         </Grid>

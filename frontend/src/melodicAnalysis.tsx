@@ -100,7 +100,6 @@ const usesMostlyStepwiseMotion = (melody: Voice): Error => {
       return Math.abs(intNumber);
     }
   });
-  console.log(melodicIntervalNumbers);
 
   const intervalCount = melodicIntervalNumbers.length;
 
@@ -193,8 +192,6 @@ export const melodicAnalysis = (melody: Voice) => {
     rangeWithinAnOctave: rangeIsWithinAnOctave(notes),
     leapsResolveAppropriately: leapsResolveAppropriately(melody),
   };
-
-  console.log(errors);
 
   return errors;
 };

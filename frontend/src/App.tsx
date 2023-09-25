@@ -13,7 +13,6 @@ import {
   Grid,
   List,
   ListItem,
-  Sheet,
   Typography,
 } from '@mui/joy';
 
@@ -24,7 +23,6 @@ import {
 } from '@mui/material/styles';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import theme from './theme';
-import { AppBar } from '@mui/material';
 
 const materialTheme = materialExtendTheme();
 
