@@ -23,6 +23,8 @@ import {
 } from '@mui/material/styles';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import theme from './theme';
+import HelpModal from './components/HelpModal';
+import ShowExample from './components/ShowExample';
 
 const materialTheme = materialExtendTheme();
 
@@ -71,6 +73,7 @@ const App = () => {
             Harmony Helper
           </Typography>
 
+          <ShowExample setVoice1={setVoice1} setVoice2={setVoice2} />
           <NotationInput
             voice1={voice1}
             voice2={voice2}
@@ -79,7 +82,6 @@ const App = () => {
             checkTritones={checkTritones}
             showMotion={showMotion}
           />
-
           <List
             variant="outlined"
             orientation="horizontal"
@@ -108,7 +110,6 @@ const App = () => {
               </Grid>
             </Grid>
           </List>
-
           <Accordion defaultExpanded={true}>
             <AccordionSummary>
               <Typography level="h3">Melodic Analysis</Typography>
@@ -130,6 +131,7 @@ const App = () => {
               </Grid>
             </AccordionDetails>
           </Accordion>
+          <HelpModal />
         </Container>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>

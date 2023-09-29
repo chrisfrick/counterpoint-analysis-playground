@@ -29,7 +29,11 @@ const Notation = ({ abcString }: NotationProps) => {
   const text = document.querySelectorAll('.abcjs-annotation');
   return (
     <Box sx={{ width: 1, mt: 1, mb: 1 }}>
-      <Sheet variant="outlined" color="neutral" ref={notation}></Sheet>
+      <Sheet
+        variant="plain"
+        sx={{ backgroundColor: 'white' }}
+        ref={notation}
+      ></Sheet>
     </Box>
   );
 };
