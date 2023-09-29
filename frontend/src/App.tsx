@@ -13,12 +13,8 @@ import {
   Grid,
   List,
   ListItem,
-  Sheet,
   Typography,
 } from '@mui/joy';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
-import HelpIcon from '@mui/icons-material/Help';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 import {
   experimental_extendTheme as materialExtendTheme,
@@ -27,7 +23,8 @@ import {
 } from '@mui/material/styles';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import theme from './theme';
-import { Backdrop, SpeedDial, SpeedDialAction } from '@mui/material';
+import HelpModal from './components/HelpModal';
+import ShowExample from './components/ShowExample';
 
 const materialTheme = materialExtendTheme();
 
@@ -58,7 +55,6 @@ const App = () => {
 
   const [checkTritones, setCheckTritones] = useState(true);
   const [showMotion, setShowMotion] = useState(true);
-  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -77,6 +73,7 @@ const App = () => {
             Harmony Helper
           </Typography>
 
+          <ShowExample setVoice1={setVoice1} setVoice2={setVoice2} />
           <NotationInput
             voice1={voice1}
             voice2={voice2}
@@ -85,7 +82,6 @@ const App = () => {
             checkTritones={checkTritones}
             showMotion={showMotion}
           />
-
           <List
             variant="outlined"
             orientation="horizontal"
@@ -114,7 +110,6 @@ const App = () => {
               </Grid>
             </Grid>
           </List>
-
           <Accordion defaultExpanded={true}>
             <AccordionSummary>
               <Typography level="h3">Melodic Analysis</Typography>
@@ -136,30 +131,7 @@ const App = () => {
               </Grid>
             </AccordionDetails>
           </Accordion>
-          <Backdrop open={helpOpen}>
-            <Sheet>
-              <Typography level="h2">Keyboard shortcuts: </Typography>
-              <Typography>a-g: select notes</Typography>
-            </Sheet>
-          </Backdrop>
-          <SpeedDial
-            ariaLabel="help"
-            sx={{ position: 'absolute', bottom: 30, right: 30 }}
-            icon={<QuestionMarkIcon />}
-            onOpen={() => setHelpOpen(true)}
-            onClose={() => setHelpOpen(false)}
-          >
-            <SpeedDialAction
-              tooltipOpen
-              tooltipTitle="Tutorial"
-              icon={<HelpIcon />}
-            ></SpeedDialAction>
-            <SpeedDialAction
-              tooltipOpen
-              tooltipTitle="Show example"
-              icon={<MusicNoteIcon />}
-            ></SpeedDialAction>
-          </SpeedDial>
+          <HelpModal />
         </Container>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>
