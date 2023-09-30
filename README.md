@@ -1,6 +1,6 @@
 # Music Theory Counterpoint Exercise Analysis/Validation
 
-[View Live Demo](https://harmony-helper.fly.dev/)
+## [View Live Demo](https://harmony-helper.fly.dev/)
 
 ## About
 
