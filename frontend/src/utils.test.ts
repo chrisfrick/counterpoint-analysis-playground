@@ -7,6 +7,59 @@ import {
   calculateMelodicIntervals,
 } from './utils';
 
+describe('calculateMelodicIntervals', () => {
+  test('returns appropriate array', () => {
+    const voice: Voice = {
+      key: 'D',
+      timeSignature: '4/4',
+      clef: 'treble',
+      cantus: false,
+      measures: [
+        {
+          notes: [
+            { pitch: 'C4', duration: '1/8' },
+            { pitch: 'D4', duration: '1/8' },
+            { pitch: 'E4', duration: '1/8' },
+            { pitch: 'F4', duration: '1/8' },
+            { pitch: 'G4', duration: '1/2' },
+          ],
+        },
+        {
+          notes: [
+            { pitch: 'B4', duration: '1/4' },
+            { pitch: 'D5', duration: '1/8' },
+            { pitch: 'C5', duration: '1/8' },
+            { pitch: 'B3', duration: '1/4' },
+            { pitch: 'C4', duration: '1/4' },
+          ],
+        },
+      ],
+    };
+
+    expect(calculateMelodicIntervals(voice)).toEqual([
+      '2M',
+      '2M',
+      '2m',
+      '2M',
+      '3M',
+      '3m',
+      '-2M',
+      '-9m',
+      '2m',
+    ]);
+  });
+});
+
+describe(isTritone, () => {
+  test('returns true for a tritone interval', () => {
+    expect(isTritone('11A')).toBe(true);
+  });
+
+  test('return false for non-tritone interval', () => {
+    expect(isTritone('4P')).toBe(false);
+  });
+});
+
 describe('extractNotesFromSingleVoice', () => {
   test('returns appropriate array', () => {
     const voice: Voice = {

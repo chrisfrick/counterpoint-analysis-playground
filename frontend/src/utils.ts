@@ -26,7 +26,9 @@ export const extractNotesFromSingleVoice = (voice: Voice) => {
 };
 
 export const isTritone = (interval: string) => {
-  if (Interval.get(interval).semitones === 6) {
+  if (
+    Interval.get(Interval.simplify(Interval.get(interval).name)).semitones === 6
+  ) {
     return true;
   }
   return false;
