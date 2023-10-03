@@ -4,13 +4,12 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Stack,
   Typography,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Error, MelodicErrors, Voice } from '../types';
-import { melodicAnalysis } from '../melodicAnalysis';
+import { Error, MelodicErrors, Voice } from '../../types';
+import { melodicAnalysis } from '../../melodicAnalysis';
 
 interface Props {
   voice: Voice;

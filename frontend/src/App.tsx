@@ -1,20 +1,15 @@
 import { useState } from 'react';
 import { Voice } from './types';
-import MelodicErrorList from './components/MelodicErrors';
+
+import emptyVoices from './data/emptyFirstSpeciesVoices';
+import Logo from './components/Logo';
+import ShowExample from './components/ShowExample';
 import NotationInput from './components/NotationInput/NotationInput';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Card,
-  Checkbox,
-  Container,
-  CssBaseline,
-  Grid,
-  List,
-  ListItem,
-  Typography,
-} from '@mui/joy';
+import ErrorCheckingSelection from './components/ErrorCheckingSelection';
+import MelodicAnalysis from './components/MelodicAnalysis';
+import HelpModal from './components/HelpModal';
+
+import { Container, CssBaseline } from '@mui/joy';
 
 import {
   experimental_extendTheme as materialExtendTheme,
@@ -23,35 +18,13 @@ import {
 } from '@mui/material/styles';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import theme from './theme';
-import HelpModal from './components/HelpModal';
-import ShowExample from './components/ShowExample';
 
 const materialTheme = materialExtendTheme();
 
 const App = () => {
-  const [voice2, setVoice2] = useState<Voice>({
-    key: 'C',
-    timeSignature: '4/4',
-    clef: 'bass',
-    cantus: false,
-    measures: [
-      {
-        notes: [],
-      },
-    ],
-  });
+  const [voice2, setVoice2] = useState<Voice>(emptyVoices.lowerVoice);
 
-  const [voice1, setVoice1] = useState<Voice>({
-    key: 'C',
-    timeSignature: '4/4',
-    clef: 'treble',
-    cantus: false,
-    measures: [
-      {
-        notes: [],
-      },
-    ],
-  });
+  const [voice1, setVoice1] = useState<Voice>(emptyVoices.upperVoice);
 
   const [checkTritones, setCheckTritones] = useState(true);
   const [showMotion, setShowMotion] = useState(true);
@@ -61,19 +34,10 @@ const App = () => {
       <JoyCssVarsProvider theme={theme}>
         <CssBaseline />
         <Container>
-          <Typography
-            level="h1"
-            py={2}
-            sx={{
-              background: 'linear-gradient(to right bottom, #5bb9f0, #021017)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Harmony Helper
-          </Typography>
+          <Logo />
 
           <ShowExample setVoice1={setVoice1} setVoice2={setVoice2} />
+
           <NotationInput
             voice1={voice1}
             voice2={voice2}
@@ -82,55 +46,15 @@ const App = () => {
             checkTritones={checkTritones}
             showMotion={showMotion}
           />
-          <List
-            variant="outlined"
-            orientation="horizontal"
-            sx={{ '--List-padding': '8px', '--List-radius': '8px' }}
-          >
-            <Grid container>
-              <Grid>
-                <ListItem>
-                  <Checkbox
-                    checked={checkTritones}
-                    label="Check for tritones"
-                    size="lg"
-                    onChange={(event) => setCheckTritones(event.target.checked)}
-                  />
-                </ListItem>
-              </Grid>
-              <Grid>
-                <ListItem>
-                  <Checkbox
-                    checked={showMotion}
-                    label="Show motion"
-                    size="lg"
-                    onChange={(event) => setShowMotion(event.target.checked)}
-                  />
-                </ListItem>
-              </Grid>
-            </Grid>
-          </List>
-          <Accordion defaultExpanded={true}>
-            <AccordionSummary>
-              <Typography level="h3">Melodic Analysis</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={2}>
-                <Grid xs={12} md={6}>
-                  <Card variant="outlined" sx={{ p: 2 }}>
-                    <Typography level="h4">Upper Voice</Typography>
-                    <MelodicErrorList voice={voice1} />
-                  </Card>
-                </Grid>
-                <Grid xs={12} md={6}>
-                  <Card variant="outlined" sx={{ p: 2 }}>
-                    <Typography level="h4">Lower Voice</Typography>
-                    <MelodicErrorList voice={voice2} />
-                  </Card>
-                </Grid>
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
+
+          <ErrorCheckingSelection
+            checkTritones={checkTritones}
+            setCheckTritones={setCheckTritones}
+            showMotion={showMotion}
+            setShowMotion={setShowMotion}
+          />
+
+          <MelodicAnalysis voice1={voice1} voice2={voice2} />
           <HelpModal />
         </Container>
       </JoyCssVarsProvider>
