@@ -136,3 +136,75 @@ export const music: Music = {
   voice1: exampleUpperVoice,
   voice2: exampleLowerVoice,
 };
+
+export const exampleUpperVoiceWithTritoneError: Voice = {
+  key: 'C',
+  timeSignature: '4/4',
+  clef: 'treble',
+  cantus: false,
+  measures: [
+    {
+      notes: [
+        {
+          pitch: 'C5',
+          duration: '1/2',
+        },
+        {
+          pitch: 'B4',
+          duration: '1/2',
+        },
+      ],
+    },
+    {
+      notes: [
+        {
+          pitch: 'G4',
+          duration: '1/2',
+        },
+        {
+          pitch: 'A4',
+          duration: '1/2',
+        },
+      ],
+    },
+    {
+      notes: [
+        {
+          pitch: 'G4',
+          duration: '1/2',
+        },
+        {
+          pitch: 'B4',
+          duration: '1/2',
+        },
+      ],
+    },
+    {
+      notes: [
+        {
+          pitch: 'B4',
+          duration: '1/2',
+        },
+        {
+          pitch: 'B4',
+          duration: '1/2',
+        },
+      ],
+    },
+    {
+      notes: [
+        {
+          pitch: 'C5',
+          duration: '1',
+        },
+      ],
+    },
+  ],
+};
+
+export const musicWithTritoneError: Music = {
+  key: 'C',
+  timeSignature: '4/4',
+  voice1: exampleUpperVoiceWithTritoneError,
+  voice2: exampleLowerVoice,
+};
